@@ -210,7 +210,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
         <div class="mapgrid" id="mapProd"></div>
         <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <button class="btn pri" id="runBtn">Match IDs</button>
-          <button class="btn success hidden" id="publishBtn">🚀 Publish to Live Dashboards</button>
+          <button class="btn success hidden" id="publishBtn">🚀 Publish for All Browsers (Download Data File)</button>
           <button class="btn" id="resetBtn">Reset</button>
           <span class="msg" id="runMsg" style="font-size:13px;color:var(--mut);font-weight:600"></span>
         </div>
@@ -234,7 +234,13 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
           <p style="color:var(--mut);max-width:550px;margin:8px auto 16px">
             The dashboards are waiting for published pricing data. If you are an admin, click "Admin Login" above to map and publish your files.
           </p>
-          <button class="btn pri" id="loginPromptBtn">🔒 Admin Login</button>
+          <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
+            <button class="btn pri" id="loginPromptBtn">🔒 Admin Login</button>
+            <label class="btn" style="cursor:pointer">
+              📁 Load pricing-data.json
+              <input type="file" id="manualDataUpload" accept=".json" class="sr">
+            </label>
+          </div>
         </div>
 
         <div id="dashContent" class="hidden">
@@ -316,7 +322,7 @@ var ADMIN_PIN = 'admin123';
 var ACTIVE_CHANNEL = 'ALL';
 var STATUS_FILTER = 'ALL';
 var SEARCH_TERM = '';
-var PAGE_SIZE = '100'; // Default to 100 for fast, non-blocking rendering
+var PAGE_SIZE = '100';
 var CURRENT_PAGE = 1;
 var F = {M:null, D:null, P:null};
 var PUBLISHED_DATA = null;
@@ -324,7 +330,7 @@ var PUBLISHED_DATA = null;
 function toast(m){
   var t=$('toastEl'); if(t) t.remove();
   var n=el('div','toast',m); n.id='toastEl'; document.body.appendChild(n);
-  setTimeout(function(){ if(n.parentNode) n.remove(); }, 3000);
+  setTimeout(function(){ if(n.parentNode) n.remove(); }, 3500);
 }
 
 function idText(v){
@@ -492,7 +498,7 @@ function refreshMappingForm(){
   $('mapCard').classList.remove('hidden');
 }
 
-/* ------------------------------------------------------------- Non-Blocking Matching Engine */
+/* ------------------------------------------------------------- Fast Matching Engine */
 function buildIndex(file, erpCol, backCol){
   var map = new Map(), conflicts = new Map(), dupes = 0;
   for(var i=0; i<file.objs.length; i++){
@@ -524,7 +530,6 @@ function runMatchAsync(){
   btn.textContent = 'Processing Data... ⏳';
   $('runMsg').textContent = 'Matching records, please wait...';
 
-  // Use setTimeout to yield to the browser UI thread
   setTimeout(function(){
     try {
       var di = buildIndex(F.D, dK, dV);
@@ -535,7 +540,6 @@ function runMatchAsync(){
         return c !== mD && c !== mP;
       });
 
-      // Ultra-fast 1-time channel detection: check filename first
       var fileChannel = null;
       if (F.M && F.M.name) {
         if (F.M.name.includes('11482')) fileChannel = 'GT';
@@ -543,7 +547,6 @@ function runMatchAsync(){
         else if (F.M.name.includes('182386')) fileChannel = 'INSTI';
       }
 
-      // Check first row if column not chosen
       var compCol = mComp;
       if (!compCol && !fileChannel && F.M.objs.length > 0) {
         var first = F.M.objs[0];
@@ -577,7 +580,6 @@ function runMatchAsync(){
         else if(!dFound) status = 'Distributor Not Found';
         else status = 'Product Not Found';
 
-        // Fast Channel Assignment
         var chVal = fileChannel;
         if (!chVal) {
           if (compCol && o[compCol] != null) {
@@ -636,7 +638,7 @@ function runMatchAsync(){
   }, 40);
 }
 
-/* ------------------------------------------------------------- High-Speed Dashboard Rendering */
+/* ------------------------------------------------------------- Dashboard Rendering */
 function renderDashboard(){
   if(!PUBLISHED_DATA || !PUBLISHED_DATA.rows.length){
     $('noDataNotice').classList.remove('hidden');
@@ -661,7 +663,6 @@ function renderDashboard(){
   else if(ACTIVE_CHANNEL === 'MT') activeList = mt;
   else if(ACTIVE_CHANNEL === 'INSTI') activeList = insti;
 
-  /* KPI Tiles */
   var total = activeList.length;
   var matched = activeList.filter(function(r){ return r.ok; }).length;
   var issues = total - matched;
@@ -685,7 +686,6 @@ function renderDashboard(){
     kg.appendChild(d);
   });
 
-  /* Table Header setup */
   var pCols = PUBLISHED_DATA.priceCols || [];
   var thHtml = '<tr><th>Channel</th><th>Distributor ERP</th><th>' + esc(PUBLISHED_DATA.dName || 'Mapped Distributor') + '</th><th>Product ERP</th><th>' + esc(PUBLISHED_DATA.pName || 'Mapped Product') + '</th>';
   for(var p=0; p<pCols.length; p++){
@@ -694,7 +694,6 @@ function renderDashboard(){
   thHtml += '<th>Status</th><th>Notes</th></tr>';
   $('dataHeader').innerHTML = thHtml;
 
-  /* Filter Logic */
   var filtered = activeList.filter(function(r){
     if(STATUS_FILTER === 'MATCHED' && !r.ok) return false;
     if(STATUS_FILTER === 'ISSUES' && r.ok) return false;
@@ -716,7 +715,6 @@ function renderDashboard(){
     return true;
   });
 
-  /* Slicing and Pagination */
   var pageSizeNum = PAGE_SIZE === 'ALL' ? filtered.length : parseInt(PAGE_SIZE, 10);
   if(!pageSizeNum || pageSizeNum <= 0) pageSizeNum = 100;
 
@@ -728,7 +726,6 @@ function renderDashboard(){
   var endIdx = PAGE_SIZE === 'ALL' ? filtered.length : Math.min(startIdx + pageSizeNum, filtered.length);
   var slice = filtered.slice(startIdx, endIdx);
 
-  /* High-Speed String Concatenation */
   var rowsHtml = [];
   for(var i=0; i<slice.length; i++){
     var r = slice[i];
@@ -764,9 +761,8 @@ function renderDashboard(){
 
   $('dataBody').innerHTML = rowsHtml.join('');
 
-  /* Pagination Bar Updates */
   if(PAGE_SIZE === 'ALL'){
-    $('tableNotice').textContent = 'Displaying all ' + INT.format(filtered.length) + ' records on this screen.';
+    $('tableNotice').textContent = 'Displaying all ' + INT.format(filtered.length) + ' records.';
     $('pageControls').classList.add('hidden');
   } else {
     $('tableNotice').textContent = 'Showing ' + INT.format(startIdx + (slice.length ? 1 : 0)) + ' to ' + INT.format(endIdx) + ' of ' + INT.format(filtered.length) + ' records';
@@ -896,17 +892,51 @@ $('searchBox').oninput = function(e){
 
 $('runBtn').onclick = runMatchAsync;
 
+/* Publish Button: Downloads pricing-data.json for GitHub and saves locally */
 $('publishBtn').onclick = function(){
+  if(!PUBLISHED_DATA) return;
+  var jsonStr = JSON.stringify(PUBLISHED_DATA);
+
+  // 1. Save in local browser
   try {
-    localStorage.setItem('PRICING_PUBLISHED_DATA', JSON.stringify(PUBLISHED_DATA));
-    toast('🚀 Published successfully! Dashboards are live.');
-    setRole('viewer');
-    renderDashboard();
-  } catch(e){
-    toast('Published for this active session (Storage full)');
-    setRole('viewer');
-    renderDashboard();
-  }
+    localStorage.setItem('PRICING_PUBLISHED_DATA', jsonStr);
+  } catch(e){}
+
+  // 2. Download pricing-data.json so it can be added to GitHub
+  var blob = new Blob([jsonStr], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pricing-data.json';
+  a.click();
+
+  alert(
+    '✅ Data File Downloaded: "pricing-data.json"!\n\n' +
+    'To make this data visible to ALL users on any browser/device:\n' +
+    '1. Go to your GitHub repository.\n' +
+    '2. Click "Add file" -> "Upload files".\n' +
+    '3. Upload this "pricing-data.json" file next to index.html and commit.\n\n' +
+    'Once uploaded, anyone with your link will automatically see the live published dashboards!'
+  );
+
+  setRole('viewer');
+  renderDashboard();
+};
+
+// Manual JSON file loader fallback
+$('manualDataUpload').onchange = function(e){
+  var file = e.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(evt){
+    try {
+      PUBLISHED_DATA = JSON.parse(evt.target.result);
+      renderDashboard();
+      toast('Loaded published pricing data successfully!');
+    } catch(err){
+      alert('Invalid data file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
 };
 
 $('exportChannelBtn').onclick = function(){ exportDataset('xlsx'); };
@@ -935,9 +965,21 @@ document.addEventListener('click', function(e){
   d.addEventListener('drop', function(e){ e.preventDefault(); d.classList.remove('over'); if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0], k); });
 });
 
-/* Init */
-(function init(){
+/* Init: Auto-fetch pricing-data.json from GitHub, or fallback to localStorage */
+async function initApp(){
   $('copyYear').textContent = new Date().getFullYear();
+
+  // 1. Try to fetch pricing-data.json from your GitHub Pages root
+  try {
+    var res = await fetch('./pricing-data.json?cache_bust=' + Date.now());
+    if(res.ok){
+      PUBLISHED_DATA = await res.json();
+      renderDashboard();
+      return;
+    }
+  } catch(e){}
+
+  // 2. Fallback to localStorage (for the admin's current browser)
   try {
     var saved = localStorage.getItem('PRICING_PUBLISHED_DATA');
     if(saved){
@@ -945,7 +987,9 @@ document.addEventListener('click', function(e){
       renderDashboard();
     }
   } catch(e){}
-})();
+}
+
+initApp();
 </script>
 </body>
 </html>
