@@ -31,7 +31,6 @@ h1,h2,h3{margin:0;font-weight:680;letter-spacing:-.018em}
 button{font:inherit;color:inherit}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
-/* Header & FieldAssist Branding */
 header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
 .wrap{max-width:1420px;margin:0 auto;padding:0 20px}
 .nav-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:12px}
@@ -54,7 +53,6 @@ header{background:var(--surface);border-bottom:1px solid var(--line);position:st
 .pad{padding:16px 17px}
 .step{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--accent-ink);font-size:12.5px;font-weight:700;margin-right:7px}
 
-/* Drag & Drop */
 .drops{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media(max-width:860px){.drops{grid-template-columns:minmax(0,1fr)}}
 .drop{border:1.5px dashed var(--line2);border-radius:var(--r);padding:15px;background:var(--surface2);min-width:0}
@@ -68,7 +66,6 @@ header{background:var(--surface);border-bottom:1px solid var(--line);position:st
 .x{cursor:pointer;color:var(--mut);font-size:17px;line-height:1;padding:0 4px;border-radius:5px;flex:none}
 .x:hover{color:var(--bad);background:var(--surface2)}
 
-/* Buttons & Inputs */
 .btn{background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:7px 13px;font-size:13.5px;font-weight:620;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
@@ -87,7 +84,6 @@ select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .sect{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:18px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 .sect:first-child{margin-top:0}
 
-/* Dashboards & Metrics */
 .channel-nav{display:flex;gap:8px;border-bottom:1px solid var(--line);padding:0 17px;background:var(--surface2);border-radius:var(--r) var(--r) 0 0;overflow-x:auto}
 .tab{padding:12px 16px;border:none;background:none;font-weight:650;font-size:13.5px;color:var(--ink2);cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:7px}
 .tab:hover{color:var(--ink)}
@@ -107,7 +103,6 @@ select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .searchbox{max-width:260px;min-width:160px}
 
-/* Table */
 .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);max-height:72vh}
 table{width:100%;border-collapse:collapse;font-size:12.8px}
 th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0;z-index:2}
@@ -124,7 +119,6 @@ td.n{text-align:right}
 
 .pagination-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:12.5px;color:var(--mut)}
 
-/* Footer */
 footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0;margin-top:auto;font-size:12.5px;color:var(--mut)}
 .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .footer-brand{display:flex;align-items:center;gap:8px}
@@ -162,6 +156,36 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
 
   <!-- ADMIN STUDIO: Upload & Mapping (Hidden for Viewers) -->
   <section id="adminStudio" class="hidden">
+    
+    <!-- 1-Click GitHub Configuration Box -->
+    <div class="card" style="border:1.5px solid var(--accent)">
+      <div class="ch" style="background:color-mix(in srgb,var(--accent) 7%,transparent)">
+        <div>
+          <h2>⚡ 1-Click GitHub Direct Publish Setup</h2>
+          <p>Connect your repository once to push live data directly without downloading files.</p>
+        </div>
+      </div>
+      <div class="pad">
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+          <div>
+            <label class="maplab">GitHub Owner (Username or Org)</label>
+            <input type="text" id="ghOwner" placeholder="e.g. your-github-username">
+          </div>
+          <div>
+            <label class="maplab">Repository Name</label>
+            <input type="text" id="ghRepo" placeholder="e.g. pricing-portal">
+          </div>
+          <div>
+            <label class="maplab">Personal Access Token (Fine-grained PAT)</label>
+            <input type="password" id="ghToken" placeholder="github_pat_...">
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--mut);margin-top:8px">
+          * Stored only inside your browser's private memory. Never exposed to regular viewers.
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="ch">
         <div><h2><span class="step">1</span>Admin Data Studio — Load Mapping Files</h2>
@@ -210,7 +234,8 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
         <div class="mapgrid" id="mapProd"></div>
         <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <button class="btn pri" id="runBtn">Match IDs</button>
-          <button class="btn success hidden" id="publishBtn">🚀 Publish for All Browsers (Download Data File)</button>
+          <button class="btn success hidden" id="ghDirectPublishBtn">🚀 1-Click Publish to GitHub</button>
+          <button class="btn hidden" id="manualDownloadBtn">↓ Download JSON (Fallback)</button>
           <button class="btn" id="resetBtn">Reset</button>
           <span class="msg" id="runMsg" style="font-size:13px;color:var(--mut);font-weight:600"></span>
         </div>
@@ -234,13 +259,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
           <p style="color:var(--mut);max-width:550px;margin:8px auto 16px">
             The dashboards are waiting for published pricing data. If you are an admin, click "Admin Login" above to map and publish your files.
           </p>
-          <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
-            <button class="btn pri" id="loginPromptBtn">🔒 Admin Login</button>
-            <label class="btn" style="cursor:pointer">
-              📁 Load pricing-data.json
-              <input type="file" id="manualDataUpload" accept=".json" class="sr">
-            </label>
-          </div>
+          <button class="btn pri" id="loginPromptBtn">🔒 Admin Login</button>
         </div>
 
         <div id="dashContent" class="hidden">
@@ -623,7 +642,8 @@ function runMatchAsync(){
         updated: new Date().toISOString()
       };
 
-      $('publishBtn').classList.remove('hidden');
+      $('ghDirectPublishBtn').classList.remove('hidden');
+      $('manualDownloadBtn').classList.remove('hidden');
       $('runMsg').textContent = 'Successfully processed ' + INT.format(rows.length) + ' records.';
       toast('Matched ' + INT.format(rows.length) + ' records! Click Publish to make live.');
       CURRENT_PAGE = 1;
@@ -636,6 +656,87 @@ function runMatchAsync(){
       btn.textContent = 'Match IDs';
     }
   }, 40);
+}
+
+/* ------------------------------------------------------------- 1-Click GitHub Direct Commit API */
+function toBase64Utf8(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  }));
+}
+
+async function commitDirectToGitHub(){
+  var owner = $('ghOwner').value.trim();
+  var repo = $('ghRepo').value.trim();
+  var token = $('ghToken').value.trim();
+
+  if(!owner || !repo || !token){
+    alert('Please enter your GitHub Owner, Repo Name, and Token in the setup box above.');
+    $('ghOwner').focus();
+    return;
+  }
+
+  // Save config locally in admin's browser
+  localStorage.setItem('GH_OWNER', owner);
+  localStorage.setItem('GH_REPO', repo);
+  localStorage.setItem('GH_TOKEN', token);
+
+  var btn = $('ghDirectPublishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Pushing to GitHub... ⏳';
+
+  var apiUrl = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/pricing-data.json';
+  var sha = null;
+
+  try {
+    // 1. Get SHA if file already exists [2]
+    var getRes = await fetch(apiUrl, {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json'
+      }
+    });
+    if (getRes.ok) {
+      var fileJson = await getRes.json();
+      sha = fileJson.sha;
+    }
+
+    // 2. Commit file directly via GitHub Contents API [1, 2]
+    var jsonContent = JSON.stringify(PUBLISHED_DATA);
+    var commitPayload = {
+      message: 'Publish pricing-data.json via FieldAssist Portal [' + new Date().toISOString().slice(0,19) + ']',
+      content: toBase64Utf8(jsonContent)
+    };
+    if (sha) commitPayload.sha = sha;
+
+    var putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(commitPayload)
+    });
+
+    if(!putRes.ok){
+      var errData = await putRes.json();
+      throw new Error(errData.message || 'GitHub commit failed');
+    }
+
+    // Also update local copy
+    try { localStorage.setItem('PRICING_PUBLISHED_DATA', jsonContent); } catch(e){}
+
+    alert('🎉 Successfully committed directly to GitHub!\n\nYour GitHub repository has been updated with the new pricing-data.json. In ~1 minute, all browsers and users will automatically load this live data!');
+    setRole('viewer');
+    renderDashboard();
+
+  } catch(err) {
+    alert('GitHub Publish Error: ' + err.message + '\n\nPlease verify your GitHub Token, Repository Name, and Permissions.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 1-Click Publish to GitHub';
+  }
 }
 
 /* ------------------------------------------------------------- Dashboard Rendering */
@@ -892,51 +993,16 @@ $('searchBox').oninput = function(e){
 
 $('runBtn').onclick = runMatchAsync;
 
-/* Publish Button: Downloads pricing-data.json for GitHub and saves locally */
-$('publishBtn').onclick = function(){
+// 1-Click Direct Commit Action
+$('ghDirectPublishBtn').onclick = commitDirectToGitHub;
+
+// Fallback Download Action
+$('manualDownloadBtn').onclick = function(){
   if(!PUBLISHED_DATA) return;
   var jsonStr = JSON.stringify(PUBLISHED_DATA);
-
-  // 1. Save in local browser
-  try {
-    localStorage.setItem('PRICING_PUBLISHED_DATA', jsonStr);
-  } catch(e){}
-
-  // 2. Download pricing-data.json so it can be added to GitHub
   var blob = new Blob([jsonStr], {type: 'application/json'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'pricing-data.json';
-  a.click();
-
-  alert(
-    '✅ Data File Downloaded: "pricing-data.json"!\n\n' +
-    'To make this data visible to ALL users on any browser/device:\n' +
-    '1. Go to your GitHub repository.\n' +
-    '2. Click "Add file" -> "Upload files".\n' +
-    '3. Upload this "pricing-data.json" file next to index.html and commit.\n\n' +
-    'Once uploaded, anyone with your link will automatically see the live published dashboards!'
-  );
-
-  setRole('viewer');
-  renderDashboard();
-};
-
-// Manual JSON file loader fallback
-$('manualDataUpload').onchange = function(e){
-  var file = e.target.files[0];
-  if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(evt){
-    try {
-      PUBLISHED_DATA = JSON.parse(evt.target.result);
-      renderDashboard();
-      toast('Loaded published pricing data successfully!');
-    } catch(err){
-      alert('Invalid data file: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'pricing-data.json'; a.click();
 };
 
 $('exportChannelBtn').onclick = function(){ exportDataset('xlsx'); };
@@ -946,7 +1012,8 @@ $('resetBtn').onclick = function(){
   F = {M:null, D:null, P:null};
   ['M','D','P'].forEach(function(k){ $('i'+k).value=''; paintZone(k); });
   $('mapCard').classList.add('hidden');
-  $('publishBtn').classList.add('hidden');
+  $('ghDirectPublishBtn').classList.add('hidden');
+  $('manualDownloadBtn').classList.add('hidden');
   $('runMsg').textContent = '';
 };
 
@@ -965,13 +1032,18 @@ document.addEventListener('click', function(e){
   d.addEventListener('drop', function(e){ e.preventDefault(); d.classList.remove('over'); if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0], k); });
 });
 
-/* Init: Auto-fetch pricing-data.json from GitHub, or fallback to localStorage */
+/* Init */
 async function initApp(){
   $('copyYear').textContent = new Date().getFullYear();
 
-  // 1. Try to fetch pricing-data.json from your GitHub Pages root
+  // Preload saved GitHub credentials if available
+  if(localStorage.getItem('GH_OWNER')) $('ghOwner').value = localStorage.getItem('GH_OWNER');
+  if(localStorage.getItem('GH_REPO')) $('ghRepo').value = localStorage.getItem('GH_REPO');
+  if(localStorage.getItem('GH_TOKEN')) $('ghToken').value = localStorage.getItem('GH_TOKEN');
+
+  // 1. Auto-fetch pricing-data.json from GitHub Pages repository
   try {
-    var res = await fetch('./pricing-data.json?cache_bust=' + Date.now());
+    var res = await fetch('./pricing-data.json?cb=' + Date.now());
     if(res.ok){
       PUBLISHED_DATA = await res.json();
       renderDashboard();
@@ -979,7 +1051,7 @@ async function initApp(){
     }
   } catch(e){}
 
-  // 2. Fallback to localStorage (for the admin's current browser)
+  // 2. LocalStorage fallback
   try {
     var saved = localStorage.getItem('PRICING_PUBLISHED_DATA');
     if(saved){
