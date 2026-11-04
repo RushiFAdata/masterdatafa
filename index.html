@@ -77,7 +77,7 @@ header{background:var(--surface);border-bottom:1px solid var(--line);position:st
 .btn.success{background:var(--good);border-color:var(--good);color:#fff}
 .btn.success:hover{filter:brightness(1.08)}
 .btn.sm{padding:5px 10px;font-size:12.5px}
-.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
 
 .mapgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
 @media(max-width:760px){.mapgrid{grid-template-columns:minmax(0,1fr)}}
@@ -140,7 +140,6 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
   <div class="nav-row">
     <div class="brand">
       <div class="fa-logo">
-        <!-- FieldAssist Vector Icon -->
         <svg width="34" height="34" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="42" height="42" rx="10" fill="#122B49"/>
           <path d="M12 11H29C29 11 25.5 16.5 21 16.5H16.5V22H25C25 22 22 26.5 18.5 26.5H16.5V31H12V11Z" fill="#FF6B35"/>
@@ -213,7 +212,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
           <button class="btn pri" id="runBtn">Match IDs</button>
           <button class="btn success hidden" id="publishBtn">🚀 Publish to Live Dashboards</button>
           <button class="btn" id="resetBtn">Reset</button>
-          <span class="msg" id="runMsg" style="font-size:13px;color:var(--mut)"></span>
+          <span class="msg" id="runMsg" style="font-size:13px;color:var(--mut);font-weight:600"></span>
         </div>
       </div>
     </div>
@@ -250,13 +249,13 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
               <div style="display:flex;align-items:center;gap:5px">
-                <label for="pageSizeSelect" style="font-size:12px;color:var(--mut);font-weight:600">Show:</label>
+                <label for="pageSizeSelect" style="font-size:12px;color:var(--mut);font-weight:600">Rows:</label>
                 <select id="pageSizeSelect" style="width:auto;padding:5px 7px;font-size:12.5px">
-                  <option value="ALL" selected>All Records</option>
-                  <option value="1000">1,000</option>
-                  <option value="500">500</option>
-                  <option value="250">250</option>
-                  <option value="100">100</option>
+                  <option value="100" selected>100 per page</option>
+                  <option value="250">250 per page</option>
+                  <option value="500">500 per page</option>
+                  <option value="1000">1,000 per page</option>
+                  <option value="ALL">All Records</option>
                 </select>
               </div>
               <input type="search" id="searchBox" class="searchbox" placeholder="Search SKU, Distributor, Price...">
@@ -274,10 +273,12 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
 
           <div class="pagination-bar" id="paginationBar">
             <div id="tableNotice"></div>
-            <div id="pageControls" style="display:flex;gap:6px;align-items:center">
-              <button class="btn sm" id="prevPageBtn">← Prev</button>
+            <div id="pageControls" style="display:flex;gap:5px;align-items:center">
+              <button class="btn sm" id="firstPageBtn">⏮</button>
+              <button class="btn sm" id="prevPageBtn">◀ Prev</button>
               <span id="pageIndicator" style="font-weight:600;padding:0 5px;font-size:12px">Page 1 of 1</span>
-              <button class="btn sm" id="nextPageBtn">Next →</button>
+              <button class="btn sm" id="nextPageBtn">Next ▶</button>
+              <button class="btn sm" id="lastPageBtn">⏭</button>
             </div>
           </div>
         </div>
@@ -287,7 +288,6 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0
 
 </main>
 
-<!-- Footer with FieldAssist Copyright -->
 <footer>
   <div class="wrap">
     <div class="footer-row">
@@ -316,7 +316,7 @@ var ADMIN_PIN = 'admin123';
 var ACTIVE_CHANNEL = 'ALL';
 var STATUS_FILTER = 'ALL';
 var SEARCH_TERM = '';
-var PAGE_SIZE = 'ALL';
+var PAGE_SIZE = '100'; // Default to 100 for fast, non-blocking rendering
 var CURRENT_PAGE = 1;
 var F = {M:null, D:null, P:null};
 var PUBLISHED_DATA = null;
@@ -492,35 +492,7 @@ function refreshMappingForm(){
   $('mapCard').classList.remove('hidden');
 }
 
-/* ------------------------------------------------------------- Channel Resolution */
-function resolveChannel(row, compCol, fileName){
-  if(compCol && row[compCol] != null){
-    var v = String(row[compCol]).trim();
-    if(v.includes('11482')) return 'GT';
-    if(v.includes('162179')) return 'MT';
-    if(v.includes('182386')) return 'INSTI';
-    var u = v.toUpperCase();
-    if(u.includes('MODERN') || u === 'MT') return 'MT';
-    if(u.includes('INST') || u.includes('HORECA') || u.includes('CORP')) return 'INSTI';
-    if(u.includes('GEN') || u === 'GT' || u.includes('RETAIL')) return 'GT';
-  }
-
-  for(var k in row){
-    var str = String(row[k]||'').trim();
-    if(str === '11482' || str.includes('11482')) return 'GT';
-    if(str === '162179' || str.includes('162179')) return 'MT';
-    if(str === '182386' || str.includes('182386')) return 'INSTI';
-  }
-
-  if(fileName){
-    if(fileName.includes('11482')) return 'GT';
-    if(fileName.includes('162179')) return 'MT';
-    if(fileName.includes('182386')) return 'INSTI';
-  }
-
-  return 'GT';
-}
-
+/* ------------------------------------------------------------- Non-Blocking Matching Engine */
 function buildIndex(file, erpCol, backCol){
   var map = new Map(), conflicts = new Map(), dupes = 0;
   for(var i=0; i<file.objs.length; i++){
@@ -537,7 +509,7 @@ function buildIndex(file, erpCol, backCol){
   return {map:map, conflicts:conflicts, dupes:dupes};
 }
 
-function runMatch(){
+function runMatchAsync(){
   var mD = $('mDist').value, mP = $('mProd').value, mComp = $('mComp').value;
   var dK = $('dKey').value, dV = $('dVal').value;
   var pK = $('pKey').value, pV = $('pVal').value;
@@ -546,71 +518,125 @@ function runMatch(){
     $('runMsg').textContent = 'Please select all required Distributor and Product columns.';
     return;
   }
-  $('runMsg').textContent = '';
 
-  var di = buildIndex(F.D, dK, dV);
-  var pi = buildIndex(F.P, pK, pV);
-  var rows = [];
+  var btn = $('runBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processing Data... ⏳';
+  $('runMsg').textContent = 'Matching records, please wait...';
 
-  var priceCols = F.M.cols.filter(function(c){
-    return c !== mD && c !== mP;
-  });
+  // Use setTimeout to yield to the browser UI thread
+  setTimeout(function(){
+    try {
+      var di = buildIndex(F.D, dK, dV);
+      var pi = buildIndex(F.P, pK, pV);
+      var rows = [];
 
-  for(var i=0; i<F.M.objs.length; i++){
-    var o = F.M.objs[i];
-    var dErpRaw = idText(o[mD]), pErpRaw = idText(o[mP]);
-    var dk = idKey(o[mD]), pk = idKey(o[mP]);
-    var dBack = dk && di.map.has(dk) ? di.map.get(dk) : '';
-    var pBack = pk && pi.map.has(pk) ? pi.map.get(pk) : '';
-    var dFound = dk !== '' && di.map.has(dk);
-    var pFound = pk !== '' && pi.map.has(pk);
+      var priceCols = F.M.cols.filter(function(c){
+        return c !== mD && c !== mP;
+      });
 
-    var notes = [];
-    if(!dk || !pk) notes.push('Blank ID in Master');
-    var dConf = dk && di.conflicts.has(dk), pConf = pk && pi.conflicts.has(pk);
-    if(dConf) notes.push('Conflicting Distributor');
-    if(pConf) notes.push('Conflicting Product');
+      // Ultra-fast 1-time channel detection: check filename first
+      var fileChannel = null;
+      if (F.M && F.M.name) {
+        if (F.M.name.includes('11482')) fileChannel = 'GT';
+        else if (F.M.name.includes('162179')) fileChannel = 'MT';
+        else if (F.M.name.includes('182386')) fileChannel = 'INSTI';
+      }
 
-    var status;
-    if(dFound && pFound) status = 'Matched';
-    else if(!dFound && !pFound) status = 'Both Not Found';
-    else if(!dFound) status = 'Distributor Not Found';
-    else status = 'Product Not Found';
+      // Check first row if column not chosen
+      var compCol = mComp;
+      if (!compCol && !fileChannel && F.M.objs.length > 0) {
+        var first = F.M.objs[0];
+        for (var colKey in first) {
+          var val = String(first[colKey] || '');
+          if (val === '11482' || val.includes('11482') || val === '162179' || val.includes('162179') || val === '182386' || val.includes('182386')) {
+            compCol = colKey;
+            break;
+          }
+        }
+      }
 
-    var chVal = resolveChannel(o, mComp, F.M.name);
+      for(var i=0; i<F.M.objs.length; i++){
+        var o = F.M.objs[i];
+        var dErpRaw = idText(o[mD]), pErpRaw = idText(o[mP]);
+        var dk = idKey(o[mD]), pk = idKey(o[mP]);
+        var dBack = dk && di.map.has(dk) ? di.map.get(dk) : '';
+        var pBack = pk && pi.map.has(pk) ? pi.map.get(pk) : '';
+        var dFound = dk !== '' && di.map.has(dk);
+        var pFound = pk !== '' && pi.map.has(pk);
 
-    rows.push({
-      src: o,
-      channel: chVal,
-      dErp: dErpRaw,
-      dBack: dBack,
-      pErp: pErpRaw,
-      pBack: pBack,
-      status: status,
-      notes: notes.join(' · '),
-      ok: status === 'Matched',
-      conflict: !!(dConf || pConf)
-    });
-  }
+        var notes = [];
+        if(!dk || !pk) notes.push('Blank ID in Master');
+        var dConf = dk && di.conflicts.has(dk), pConf = pk && pi.conflicts.has(pk);
+        if(dConf) notes.push('Conflicting Distributor');
+        if(pConf) notes.push('Conflicting Product');
 
-  PUBLISHED_DATA = {
-    rows: rows,
-    masterCols: F.M.cols,
-    priceCols: priceCols,
-    mD: mD,
-    mP: mP,
-    dName: dV,
-    pName: pV,
-    updated: new Date().toISOString()
-  };
+        var status;
+        if(dFound && pFound) status = 'Matched';
+        else if(!dFound && !pFound) status = 'Both Not Found';
+        else if(!dFound) status = 'Distributor Not Found';
+        else status = 'Product Not Found';
 
-  $('publishBtn').classList.remove('hidden');
-  toast('Matched ' + INT.format(rows.length) + ' records. Click Publish to make live.');
-  CURRENT_PAGE = 1;
-  renderDashboard();
+        // Fast Channel Assignment
+        var chVal = fileChannel;
+        if (!chVal) {
+          if (compCol && o[compCol] != null) {
+            var cv = String(o[compCol]).trim();
+            if (cv.includes('11482')) chVal = 'GT';
+            else if (cv.includes('162179')) chVal = 'MT';
+            else if (cv.includes('182386')) chVal = 'INSTI';
+            else {
+              var u = cv.toUpperCase();
+              if (u.includes('MODERN') || u === 'MT') chVal = 'MT';
+              else if (u.includes('INST') || u.includes('HORECA') || u.includes('CORP')) chVal = 'INSTI';
+              else chVal = 'GT';
+            }
+          } else {
+            chVal = 'GT';
+          }
+        }
+
+        rows.push({
+          src: o,
+          channel: chVal,
+          dErp: dErpRaw,
+          dBack: dBack,
+          pErp: pErpRaw,
+          pBack: pBack,
+          status: status,
+          notes: notes.join(' · '),
+          ok: status === 'Matched',
+          conflict: !!(dConf || pConf)
+        });
+      }
+
+      PUBLISHED_DATA = {
+        rows: rows,
+        masterCols: F.M.cols,
+        priceCols: priceCols,
+        mD: mD,
+        mP: mP,
+        dName: dV,
+        pName: pV,
+        updated: new Date().toISOString()
+      };
+
+      $('publishBtn').classList.remove('hidden');
+      $('runMsg').textContent = 'Successfully processed ' + INT.format(rows.length) + ' records.';
+      toast('Matched ' + INT.format(rows.length) + ' records! Click Publish to make live.');
+      CURRENT_PAGE = 1;
+      renderDashboard();
+    } catch(err) {
+      alert('Error during processing: ' + err.message);
+      $('runMsg').textContent = 'Failed: ' + err.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Match IDs';
+    }
+  }, 40);
 }
 
-/* ------------------------------------------------------------- Dashboard Rendering */
+/* ------------------------------------------------------------- High-Speed Dashboard Rendering */
 function renderDashboard(){
   if(!PUBLISHED_DATA || !PUBLISHED_DATA.rows.length){
     $('noDataNotice').classList.remove('hidden');
@@ -635,6 +661,7 @@ function renderDashboard(){
   else if(ACTIVE_CHANNEL === 'MT') activeList = mt;
   else if(ACTIVE_CHANNEL === 'INSTI') activeList = insti;
 
+  /* KPI Tiles */
   var total = activeList.length;
   var matched = activeList.filter(function(r){ return r.ok; }).length;
   var issues = total - matched;
@@ -658,21 +685,16 @@ function renderDashboard(){
     kg.appendChild(d);
   });
 
-  var thRow = el('tr');
-  ['Channel', 'Distributor ERP', PUBLISHED_DATA.dName || 'Mapped Distributor', 'Product ERP', PUBLISHED_DATA.pName || 'Mapped Product'].forEach(function(h){
-    thRow.appendChild(el('th', null, h));
-  });
-
+  /* Table Header setup */
   var pCols = PUBLISHED_DATA.priceCols || [];
-  pCols.forEach(function(pc){
-    thRow.appendChild(el('th', null, pc));
-  });
+  var thHtml = '<tr><th>Channel</th><th>Distributor ERP</th><th>' + esc(PUBLISHED_DATA.dName || 'Mapped Distributor') + '</th><th>Product ERP</th><th>' + esc(PUBLISHED_DATA.pName || 'Mapped Product') + '</th>';
+  for(var p=0; p<pCols.length; p++){
+    thHtml += '<th>' + esc(pCols[p]) + '</th>';
+  }
+  thHtml += '<th>Status</th><th>Notes</th></tr>';
+  $('dataHeader').innerHTML = thHtml;
 
-  thRow.appendChild(el('th', null, 'Status'));
-  thRow.appendChild(el('th', null, 'Notes'));
-  $('dataHeader').innerHTML = '';
-  $('dataHeader').appendChild(thRow);
-
+  /* Filter Logic */
   var filtered = activeList.filter(function(r){
     if(STATUS_FILTER === 'MATCHED' && !r.ok) return false;
     if(STATUS_FILTER === 'ISSUES' && r.ok) return false;
@@ -694,8 +716,9 @@ function renderDashboard(){
     return true;
   });
 
+  /* Slicing and Pagination */
   var pageSizeNum = PAGE_SIZE === 'ALL' ? filtered.length : parseInt(PAGE_SIZE, 10);
-  if(!pageSizeNum || pageSizeNum <= 0) pageSizeNum = filtered.length || 1;
+  if(!pageSizeNum || pageSizeNum <= 0) pageSizeNum = 100;
 
   var totalPages = Math.ceil(filtered.length / pageSizeNum) || 1;
   if(CURRENT_PAGE > totalPages) CURRENT_PAGE = totalPages;
@@ -705,62 +728,54 @@ function renderDashboard(){
   var endIdx = PAGE_SIZE === 'ALL' ? filtered.length : Math.min(startIdx + pageSizeNum, filtered.length);
   var slice = filtered.slice(startIdx, endIdx);
 
-  var tb = $('dataBody');
-  tb.innerHTML = '';
-  var frag = document.createDocumentFragment();
+  /* High-Speed String Concatenation */
+  var rowsHtml = [];
+  for(var i=0; i<slice.length; i++){
+    var r = slice[i];
+    var chClass = 'p-' + r.channel.toLowerCase();
+    var dBackHtml = r.dBack ? esc(r.dBack) : '<span class="pill p-bad">Not Found</span>';
+    var pBackHtml = r.pBack ? esc(r.pBack) : '<span class="pill p-bad">Not Found</span>';
+    var stClass = r.ok ? 'p-ok' : 'p-bad';
 
-  slice.forEach(function(r){
-    var tr = el('tr');
-    var chBadge = el('span', 'pill p-' + r.channel.toLowerCase(), r.channel);
-    var tdCh = el('td'); tdCh.appendChild(chBadge); tr.appendChild(tdCh);
-
-    tr.appendChild(el('td', 'mono', r.dErp || '—'));
-    var tdD = el('td', 'mono');
-    if(r.dBack) tdD.textContent = r.dBack;
-    else tdD.appendChild(el('span', 'pill p-bad', 'Not Found'));
-    tr.appendChild(tdD);
-
-    tr.appendChild(el('td', 'mono', r.pErp || '—'));
-    var tdP = el('td', 'mono');
-    if(r.pBack) tdP.textContent = r.pBack;
-    else tdP.appendChild(el('span', 'pill p-bad', 'Not Found'));
-    tr.appendChild(tdP);
-
-    pCols.forEach(function(pc){
-      var val = r.src[pc];
+    var pricesHtml = '';
+    for(var k=0; k<pCols.length; k++){
+      var val = r.src[pCols[k]];
       var isNum = typeof val === 'number' || (!isNaN(val) && val !== '' && val != null);
-      var tdPrice = el('td', isNum ? 'mono n' : null, (val == null || val === '') ? '—' : String(val));
-      tr.appendChild(tdPrice);
-    });
+      pricesHtml += '<td' + (isNum ? ' class="mono n"' : '') + '>' + (val == null || val === '' ? '—' : esc(val)) + '</td>';
+    }
 
-    var tdSt = el('td');
-    tdSt.appendChild(el('span', 'pill ' + (r.ok ? 'p-ok' : 'p-bad'), r.status));
-    tr.appendChild(tdSt);
-
-    var tdNt = el('td', null, r.notes || '—');
-    tr.appendChild(tdNt);
-    frag.appendChild(tr);
-  });
+    rowsHtml.push(
+      '<tr>' +
+        '<td><span class="pill ' + chClass + '">' + esc(r.channel) + '</span></td>' +
+        '<td class="mono">' + esc(r.dErp || '—') + '</td>' +
+        '<td class="mono">' + dBackHtml + '</td>' +
+        '<td class="mono">' + esc(r.pErp || '—') + '</td>' +
+        '<td class="mono">' + pBackHtml + '</td>' +
+        pricesHtml +
+        '<td><span class="pill ' + stClass + '">' + esc(r.status) + '</span></td>' +
+        '<td>' + esc(r.notes || '—') + '</td>' +
+      '</tr>'
+    );
+  }
 
   if(!slice.length){
-    var tr0 = el('tr');
-    var td0 = el('td', null, 'No records found matching this view/search.');
-    td0.colSpan = 7 + pCols.length;
-    td0.style.cssText = 'text-align:center;padding:25px;color:var(--mut)';
-    tr0.appendChild(td0);
-    frag.appendChild(tr0);
+    rowsHtml.push('<tr><td colspan="' + (7 + pCols.length) + '" style="text-align:center;padding:25px;color:var(--mut)">No records found matching this view/search.</td></tr>');
   }
-  tb.appendChild(frag);
 
+  $('dataBody').innerHTML = rowsHtml.join('');
+
+  /* Pagination Bar Updates */
   if(PAGE_SIZE === 'ALL'){
-    $('tableNotice').textContent = 'Displaying all ' + INT.format(filtered.length) + ' records.';
+    $('tableNotice').textContent = 'Displaying all ' + INT.format(filtered.length) + ' records on this screen.';
     $('pageControls').classList.add('hidden');
   } else {
     $('tableNotice').textContent = 'Showing ' + INT.format(startIdx + (slice.length ? 1 : 0)) + ' to ' + INT.format(endIdx) + ' of ' + INT.format(filtered.length) + ' records';
     $('pageControls').classList.remove('hidden');
     $('pageIndicator').textContent = 'Page ' + CURRENT_PAGE + ' of ' + totalPages;
+    $('firstPageBtn').disabled = CURRENT_PAGE <= 1;
     $('prevPageBtn').disabled = CURRENT_PAGE <= 1;
     $('nextPageBtn').disabled = CURRENT_PAGE >= totalPages;
+    $('lastPageBtn').disabled = CURRENT_PAGE >= totalPages;
   }
 }
 
@@ -846,6 +861,12 @@ $('pageSizeSelect').onchange = function(e){
   renderDashboard();
 };
 
+$('firstPageBtn').onclick = function(){
+  CURRENT_PAGE = 1;
+  renderDashboard();
+  $('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
 $('prevPageBtn').onclick = function(){
   if(CURRENT_PAGE > 1){
     CURRENT_PAGE--;
@@ -860,13 +881,21 @@ $('nextPageBtn').onclick = function(){
   $('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
+$('lastPageBtn').onclick = function(){
+  var pageSizeNum = PAGE_SIZE === 'ALL' ? PUBLISHED_DATA.rows.length : parseInt(PAGE_SIZE, 10);
+  CURRENT_PAGE = Math.ceil(PUBLISHED_DATA.rows.length / pageSizeNum);
+  renderDashboard();
+  $('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
 $('searchBox').oninput = function(e){
   SEARCH_TERM = e.target.value.trim();
   CURRENT_PAGE = 1;
   renderDashboard();
 };
 
-$('runBtn').onclick = runMatch;
+$('runBtn').onclick = runMatchAsync;
+
 $('publishBtn').onclick = function(){
   try {
     localStorage.setItem('PRICING_PUBLISHED_DATA', JSON.stringify(PUBLISHED_DATA));
@@ -888,6 +917,7 @@ $('resetBtn').onclick = function(){
   ['M','D','P'].forEach(function(k){ $('i'+k).value=''; paintZone(k); });
   $('mapCard').classList.add('hidden');
   $('publishBtn').classList.add('hidden');
+  $('runMsg').textContent = '';
 };
 
 document.addEventListener('click', function(e){
