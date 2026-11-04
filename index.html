@@ -1,6 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Master Pricing ID Mapping</title>
+<title>Master Pricing & Channel Portal</title>
 <style>
 :root{
   --bg:#f4f6f9; --surface:#fff; --surface2:#eef1f6; --line:#dfe4ea; --line2:#c9d1dc;
@@ -8,6 +11,7 @@
   --accent:#2F6FB8; --accent-ink:#fff; --teal:#00A88F;
   --good:#1E7A4C; --goodbg:#e9f4ee; --warn:#B4701C; --warnbg:#fcf4e8;
   --bad:#B33A28; --badbg:#fbeceb;
+  --gt-color:#1E7A4C; --mt-color:#2F6FB8; --insti-color:#7B39BB;
   --ui:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --r:11px; --shadow:0 1px 2px rgba(22,35,63,.06),0 5px 16px rgba(22,35,63,.06);
@@ -19,31 +23,30 @@
   --good:#46A472; --goodbg:#132c1e; --warn:#D9954F; --warnbg:#31230f;
   --bad:#DD6A55; --badbg:#341710; --shadow:none; color-scheme:dark;
 }}
-:root[data-theme=dark]{
-  --bg:#0f1829; --surface:#16213a; --surface2:#1d2a47; --line:#273450; --line2:#36445f;
-  --ink:#e9edf4; --ink2:#a8b2c6; --mut:#7c8699;
-  --accent:#4C8FD0; --accent-ink:#071020; --teal:#35BFA6;
-  --good:#46A472; --goodbg:#132c1e; --warn:#D9954F; --warnbg:#31230f;
-  --bad:#DD6A55; --badbg:#341710; --shadow:none; color-scheme:dark;
-}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5}
-h1,h2{margin:0;font-weight:680;letter-spacing:-.018em}
+h1,h2,h3{margin:0;font-weight:680;letter-spacing:-.018em}
 button{font:inherit;color:inherit}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-header{background:var(--surface);border-bottom:1px solid var(--line)}
-.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
-header .wrap{padding-block:18px}
-h1{font-size:21px}
-.sub{margin:7px 0 0;font-size:13.5px;color:var(--mut);max-width:80ch}
+header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.nav-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.badge{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.b-viewer{background:var(--goodbg);color:var(--good);border:1px solid currentColor}
+.b-admin{background:var(--warnbg);color:var(--warn);border:1px solid currentColor}
+.role-btn{background:transparent;border:1px solid var(--line2);padding:6px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600}
+.role-btn:hover{background:var(--surface2)}
+
 main{padding-block:22px 70px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px}
-.ch{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 17px;border-bottom:1px solid var(--line)}
-.ch h2{font-size:15.5px}
+.ch{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 17px;border-bottom:1px solid var(--line)}
+.ch h2{font-size:16px}
 .ch p{margin:0;font-size:12.5px;color:var(--mut)}
 .pad{padding:16px 17px}
-.step{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
-  border-radius:7px;background:var(--accent);color:var(--accent-ink);font-size:12.5px;font-weight:700;flex:none}
+.step{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--accent-ink);font-size:12.5px;font-weight:700;margin-right:7px}
+
+/* Drag & Drop */
 .drops{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media(max-width:860px){.drops{grid-template-columns:minmax(0,1fr)}}
 .drop{border:1.5px dashed var(--line2);border-radius:var(--r);padding:15px;background:var(--surface2);min-width:0}
@@ -56,43 +59,50 @@ main{padding-block:22px 70px}
 .fmeta{font-size:12px;color:var(--mut);margin-top:3px}
 .x{cursor:pointer;color:var(--mut);font-size:17px;line-height:1;padding:0 4px;border-radius:5px;flex:none}
 .x:hover{color:var(--bad);background:var(--surface2)}
-.btn{background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:7px 13px;
-  font-size:13.5px;font-weight:620;cursor:pointer;white-space:nowrap}
+
+/* Buttons & Inputs */
+.btn{background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:7px 13px;font-size:13.5px;font-weight:620;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.pri:hover{filter:brightness(1.07);color:var(--accent-ink)}
-.btn.sm{padding:4px 9px;font-size:12.5px}
+.btn.success{background:var(--good);border-color:var(--good);color:#fff}
+.btn.success:hover{filter:brightness(1.08)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
+
 .mapgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
 @media(max-width:760px){.mapgrid{grid-template-columns:minmax(0,1fr)}}
-.maplab{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);
-  font-weight:650;margin-bottom:5px}
-select,input{width:100%;font:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);
-  border:1px solid var(--line2);border-radius:8px;padding:7px 9px;min-width:0}
+.maplab{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-weight:650;margin-bottom:5px}
+select,input{width:100%;font:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:7px 9px;min-width:0}
 select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
-.sect{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;
-  margin:18px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sect{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:18px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 .sect:first-child{margin-top:0}
+
+/* Dashboards & Metrics */
+.channel-nav{display:flex;gap:8px;border-bottom:1px solid var(--line);padding:0 17px;background:var(--surface2);border-radius:var(--r) var(--r) 0 0;overflow-x:auto}
+.tab{padding:12px 16px;border:none;background:none;font-weight:650;font-size:13.5px;color:var(--ink2);cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab .cnt-pill{font-size:11px;background:var(--surface);padding:1px 6px;border-radius:99px;border:1px solid var(--line)}
+
 .grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 @media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:620px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;min-width:0}
 .tile .lab{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;margin-bottom:6px}
-.tile .num{font-size:24px;font-weight:700;letter-spacing:-.025em;line-height:1.1;
-  font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tile .num{font-size:24px;font-weight:700;letter-spacing:-.025em;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .tile .foot{font-size:11.5px;color:var(--ink2);margin-top:4px}
 .tile.good .num{color:var(--good)} .tile.bad .num{color:var(--bad)} .tile.warn .num{color:var(--warn)}
-@media(max-width:620px){.tile .num{font-size:20px}}
-.note{margin-top:14px;padding:13px 15px;border-radius:var(--r);font-size:13.5px;line-height:1.55;
-  background:var(--warnbg);border:1px solid color-mix(in srgb,var(--warn) 32%,transparent)}
-.note.g{background:var(--goodbg);border-color:color-mix(in srgb,var(--good) 32%,transparent)}
-.msg{font-size:13px;color:var(--mut);margin-top:9px}
-.tblwrap{overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:var(--r)}
+
+.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:16px 0 12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.searchbox{max-width:280px;min-width:180px}
+
+/* Tables */
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
 table{width:100%;border-collapse:collapse;font-size:12.8px}
-th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);
-  font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;
-  background:var(--surface2);position:sticky;top:0}
+th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0}
 td{padding:8px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
 tr:last-child td{border-bottom:0}
 td.n{text-align:right}
@@ -100,564 +110,635 @@ td.n{text-align:right}
 .p-ok{color:var(--good);background:var(--goodbg)}
 .p-bad{color:var(--bad);background:var(--badbg)}
 .p-warn{color:var(--warn);background:var(--warnbg)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
-.runbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:15px}
-.cnt{font-size:12px;color:var(--mut);margin:9px 0 0}
-.foot{font-size:12.5px;color:var(--mut);margin-top:22px;line-height:1.6}
+.p-gt{color:var(--gt-color);background:color-mix(in srgb,var(--gt-color) 12%,transparent)}
+.p-mt{color:var(--mt-color);background:color-mix(in srgb,var(--mt-color) 12%,transparent)}
+.p-insti{color:var(--insti-color);background:color-mix(in srgb,var(--insti-color) 12%,transparent)}
+
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:60;
-  background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;
-  font-weight:650;box-shadow:0 8px 24px rgba(8,14,28,.3);max-width:90vw}
-</style></head><body>
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:60;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:650;box-shadow:0 8px 24px rgba(8,14,28,.3)}
+</style>
+</head>
+<body>
+
 <header><div class="wrap">
-  <h1>Master Pricing ID Mapping</h1>
-  <p class="sub">Matches distributor and product IDs against two mapping files and adds the
-  corresponding ID to every row, flags everything that
-  cannot be matched, and exports a consolidated pricing file. Every original column and value is
-  carried through unchanged, and nothing is dropped. Runs entirely in your browser.</p>
+  <div class="nav-row">
+    <div class="brand">
+      <h1>Master Pricing Portal</h1>
+      <span class="badge b-viewer" id="roleBadge">Viewer Dashboard</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="role-btn" id="toggleRoleBtn">🔒 Admin Login</button>
+    </div>
+  </div>
 </div></header>
 
 <main><div class="wrap">
 
-  <div class="card">
-    <div class="ch"><span class="step">1</span><h2>Load the three files</h2>
-      <p>Excel (.xlsx, .xls) or CSV. Drag onto a box or choose a file.</p></div>
-    <div class="pad">
-      <div class="drops">
-        <div class="drop" id="dM">
-          <div class="zt">File A &mdash; required</div>
-          <div class="zn">Master pricing</div>
-          <div class="zd">A distributor ID, a product ID, and all pricing columns</div>
-          <div id="bM"><button class="btn pri" data-pick="M">Choose file</button></div>
-        </div>
-        <div class="drop" id="dD">
-          <div class="zt">File B &mdash; required</div>
-          <div class="zn">Distributor mapping</div>
-          <div class="zd">Both distributor IDs, in either order</div>
-          <div id="bD"><button class="btn" data-pick="D">Choose file</button></div>
-        </div>
-        <div class="drop" id="dP">
-          <div class="zt">File C &mdash; required</div>
-          <div class="zn">Product mapping</div>
-          <div class="zd">Both product IDs, in either order</div>
-          <div id="bP"><button class="btn" data-pick="P">Choose file</button></div>
-        </div>
+  <!-- ADMIN STUDIO: Upload & Mapping (Hidden in Viewer Mode) -->
+  <section id="adminStudio" class="hidden">
+    <div class="card">
+      <div class="ch">
+        <div><h2><span class="step">1</span>Admin Data Studio — Load Mapping Files</h2>
+        <p>Upload your 3 source files. When matched, publish to make the 3 channel dashboards live.</p></div>
+        <button class="btn sm" id="exitAdminBtn">Exit to Viewer</button>
       </div>
-      <input type="file" id="iM" class="sr" accept=".xlsx,.xls,.csv,.xlsb,.ods">
-      <input type="file" id="iD" class="sr" accept=".xlsx,.xls,.csv,.xlsb,.ods">
-      <input type="file" id="iP" class="sr" accept=".xlsx,.xls,.csv,.xlsb,.ods">
-      <div class="msg" id="loadMsg"></div>
-    </div>
-  </div>
-
-  <div class="card hidden" id="mapCard">
-    <div class="ch"><span class="step">2</span><h2>Confirm the columns</h2>
-      <p>Pre-filled by checking which column in each mapping file actually holds the
-      same IDs as your master file &mdash; not by column name, so it works whichever
-      way round your files are. Change anything that looks wrong.</p></div>
-    <div class="pad">
-      <div class="sect">Master pricing file</div>
-      <div class="mapgrid" id="mapMaster"></div>
-      <div class="sect">Distributor mapping file</div>
-      <div class="mapgrid" id="mapDist"></div>
-      <div class="sect">Product mapping file</div>
-      <div class="mapgrid" id="mapProd"></div>
-      <div class="runbar">
-        <button class="btn pri" id="runBtn">Match IDs</button>
-        <button class="btn" id="resetBtn">Reset</button>
-        <span class="msg" id="runMsg"></span>
+      <div class="pad">
+        <div class="drops">
+          <div class="drop" id="dM">
+            <div class="zt">File A &mdash; Required</div>
+            <div class="zn">Master Pricing</div>
+            <div class="zd">Pricing columns with Distributor, Product & Channel</div>
+            <div id="bM"><button class="btn pri" data-pick="M">Choose file</button></div>
+          </div>
+          <div class="drop" id="dD">
+            <div class="zt">File B &mdash; Required</div>
+            <div class="zn">Distributor Mapping</div>
+            <div class="zd">Both distributor ERP & Backend IDs</div>
+            <div id="bD"><button class="btn" data-pick="D">Choose file</button></div>
+          </div>
+          <div class="drop" id="dP">
+            <div class="zt">File C &mdash; Required</div>
+            <div class="zn">Product Mapping</div>
+            <div class="zd">Both product ERP & Backend IDs</div>
+            <div id="bP"><button class="btn" data-pick="P">Choose file</button></div>
+          </div>
+        </div>
+        <input type="file" id="iM" class="sr" accept=".xlsx,.xls,.csv">
+        <input type="file" id="iD" class="sr" accept=".xlsx,.xls,.csv">
+        <input type="file" id="iP" class="sr" accept=".xlsx,.xls,.csv">
+        <div class="msg" id="loadMsg" style="margin-top:9px;font-size:13px;color:var(--mut)"></div>
       </div>
     </div>
-  </div>
 
-  <div id="out" class="hidden"></div>
+    <div class="card hidden" id="mapCard">
+      <div class="ch">
+        <div><h2><span class="step">2</span>Confirm Columns & Channels</h2>
+        <p>Auto-detected by checking real data overlap. Verify distributor, product, and channel mapping.</p></div>
+      </div>
+      <div class="pad">
+        <div class="sect">Master Pricing File Mapping</div>
+        <div class="mapgrid" id="mapMaster"></div>
+        <div class="sect">Distributor Mapping File</div>
+        <div class="mapgrid" id="mapDist"></div>
+        <div class="sect">Product Mapping File</div>
+        <div class="mapgrid" id="mapProd"></div>
+        <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn pri" id="runBtn">Match IDs</button>
+          <button class="btn success hidden" id="publishBtn">🚀 Publish to Live Dashboards</button>
+          <button class="btn" id="resetBtn">Reset</button>
+          <span class="msg" id="runMsg" style="font-size:13px;color:var(--mut)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p class="foot">
-    All IDs are read as text, so leading zeros survive. Pricing values are copied
-    through exactly as they appear in the source &mdash; nothing is rounded or reformatted.
-    Matching ignores surrounding spaces and letter case, while the output keeps the original spelling.
-    Records that cannot be matched stay in the file with a status against them.
-  </p>
-</div></main>
+  <!-- PUBLISHED VIEWER DASHBOARD (Visible to Everyone) -->
+  <section id="viewerPortal">
+    <div class="card">
+      <div class="channel-nav">
+        <button class="tab active" data-channel="ALL">🌐 All Channels <span class="cnt-pill" id="cntALL">0</span></button>
+        <button class="tab" data-channel="GT">🏢 General Trade (GT) <span class="cnt-pill" id="cntGT">0</span></button>
+        <button class="tab" data-channel="MT">🛒 Modern Trade (MT) <span class="cnt-pill" id="cntMT">0</span></button>
+        <button class="tab" data-channel="INSTI">🏥 Institutional (Insti) <span class="cnt-pill" id="cntINSTI">0</span></button>
+      </div>
 
-<!-- Load SheetJS library via CDN -->
+      <div class="pad">
+        <div id="noDataNotice" style="text-align:center;padding:45px 15px">
+          <h3>No Live Data Published Yet</h3>
+          <p style="color:var(--mut);max-width:550px;margin:8px auto 16px">
+            The dashboards are waiting for published pricing data. If you are an admin, click "Admin Login" above to map and publish your files.
+          </p>
+          <button class="btn pri" id="loginPromptBtn">🔒 Admin Login</button>
+        </div>
+
+        <div id="dashContent" class="hidden">
+          <div class="grid" id="kpiGrid"></div>
+
+          <div class="toolbar">
+            <div class="filters">
+              <button class="btn sm pri" data-status="ALL" id="fAll">All Records</button>
+              <button class="btn sm" data-status="MATCHED" id="fMatched">Matched</button>
+              <button class="btn sm" data-status="ISSUES" id="fIssues">Needs Checking</button>
+              <button class="btn sm" data-status="CONFLICT" id="fConflict">Conflicts</button>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="search" id="searchBox" class="searchbox" placeholder="Search Distributor, SKU...">
+              <button class="btn sm pri" id="exportChannelBtn">↓ Export Excel</button>
+              <button class="btn sm" id="exportCsvBtn">↓ CSV</button>
+            </div>
+          </div>
+
+          <div class="tblwrap">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th>Channel</th>
+                  <th>Distributor ERP</th>
+                  <th>Mapped Distributor</th>
+                  <th>Product ERP</th>
+                  <th>Mapped Product</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="dataBody"></tbody>
+            </table>
+          </div>
+          <p id="tableNotice" style="font-size:12px;color:var(--mut);margin-top:10px"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Load SheetJS for Excel & CSV parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
 "use strict";
-var $=function(i){return document.getElementById(i)};
-function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
-  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-var INT=new Intl.NumberFormat('en-IN');
-function int(n){return INT.format(n)}
+var $ = function(i){ return document.getElementById(i); };
+function el(t,c,x){ var e=document.createElement(t); if(c) e.className=c; if(x!=null) e.textContent=x; return e; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+var INT = new Intl.NumberFormat('en-IN');
 
-/* An ID is text. A number that came out of Excel is stringified without its float
-   tail; anything already text keeps its leading zeros exactly as stored. */
+/* State Variables */
+var ROLE = 'viewer'; // 'viewer' or 'admin'
+var ADMIN_PIN = 'admin123';
+var ACTIVE_CHANNEL = 'ALL';
+var STATUS_FILTER = 'ALL';
+var SEARCH_TERM = '';
+var F = {M:null, D:null, P:null};
+var PUBLISHED_DATA = null;
+
+function toast(m){
+  var t=$('toastEl'); if(t) t.remove();
+  var n=el('div','toast',m); n.id='toastEl'; document.body.appendChild(n);
+  setTimeout(function(){ if(n.parentNode) n.remove(); }, 3000);
+}
+
 function idText(v){
   if(v==null) return '';
-  if(typeof v==='number'){ return Number.isInteger(v)?String(v):String(v); }
+  if(typeof v==='number') return String(v);
   if(v instanceof Date) return v.toISOString().slice(0,10);
   return String(v).trim();
 }
-function idKey(v){ return idText(v).trim().toUpperCase() }
+function idKey(v){ return idText(v).trim().toUpperCase(); }
 
-var F={M:null,D:null,P:null}, R=null, DL=null, VIEW='all';
+/* ------------------------------------------------------------- Role Management */
+function setRole(r){
+  ROLE = r;
+  if(ROLE === 'admin'){
+    $('adminStudio').classList.remove('hidden');
+    $('roleBadge').textContent = 'Admin Studio';
+    $('roleBadge').className = 'badge b-admin';
+    $('toggleRoleBtn').textContent = '🔓 Switch to Viewer Mode';
+  } else {
+    $('adminStudio').classList.add('hidden');
+    $('roleBadge').textContent = 'Viewer Dashboard';
+    $('roleBadge').className = 'badge b-viewer';
+    $('toggleRoleBtn').textContent = '🔒 Admin Login';
+  }
+}
 
-function toast(m){var t=$('toastEl');if(t)t.remove();
-  var n=el('div','toast',m);n.id='toastEl';document.body.appendChild(n);
-  setTimeout(function(){if(n.parentNode)n.remove()},3000)}
+$('toggleRoleBtn').onclick = function(){
+  if(ROLE === 'admin'){
+    setRole('viewer');
+  } else {
+    var p = prompt('Enter Admin PIN to open Data Mapping Studio:', '');
+    if(p === ADMIN_PIN){
+      setRole('admin');
+      toast('Logged into Admin Studio');
+    } else if(p !== null) {
+      alert('Incorrect PIN');
+    }
+  }
+};
+$('exitAdminBtn').onclick = function(){ setRole('viewer'); };
+$('loginPromptBtn').onclick = function(){ $('toggleRoleBtn').click(); };
 
-/* ------------------------------------------------------------- reading */
-function readFile(file,key){
-  var fr=new FileReader();
-  $('loadMsg').textContent='Reading '+file.name+'…';
-  fr.onload=function(e){
-    try{
-      if (typeof XLSX === 'undefined') {
-        throw new Error('XLSX library failed to load. Please check your internet connection.');
-      }
-      var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-      var ws=wb.Sheets[wb.SheetNames[0]];
-      var aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null,blankrows:false});
-      if(!aoa.length) throw new Error('empty sheet');
-      var hdr=aoa[0].map(function(h,i){return (h==null||String(h).trim()==='')?('Column '+(i+1)):String(h).trim()});
-      var objs=[];
-      for(var r=1;r<aoa.length;r++){
-        var row=aoa[r]; if(!row) continue;
-        var any=false; for(var c=0;c<hdr.length;c++){ if(row[c]!=null&&row[c]!=='') {any=true;break} }
+/* ------------------------------------------------------------- File Reading */
+function readFile(file, key){
+  var fr = new FileReader();
+  $('loadMsg').textContent = 'Reading ' + file.name + '…';
+  fr.onload = function(e){
+    try {
+      if(typeof XLSX === 'undefined') throw new Error('SheetJS library not loaded');
+      var wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+      var ws = wb.Sheets[wb.SheetNames[0]];
+      var aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null, blankrows:false});
+      if(!aoa.length) throw new Error('Empty sheet');
+      var hdr = aoa[0].map(function(h,i){ return (h==null||String(h).trim()==='') ? ('Column '+(i+1)) : String(h).trim(); });
+      var objs = [];
+      for(var r=1; r<aoa.length; r++){
+        var row = aoa[r]; if(!row) continue;
+        var any = false; for(var c=0; c<hdr.length; c++){ if(row[c]!=null && row[c]!==''){ any=true; break; } }
         if(!any) continue;
-        var o={}; for(var c2=0;c2<hdr.length;c2++) o[hdr[c2]]=row[c2]==null?'':row[c2];
+        var o = {}; for(var c2=0; c2<hdr.length; c2++) o[hdr[c2]] = row[c2]==null ? '' : row[c2];
         objs.push(o);
       }
-      F[key]={name:file.name,sheet:wb.SheetNames[0],cols:hdr,objs:objs};
-      $('loadMsg').textContent='';
-      paintZone(key); refresh();
-    }catch(err){
-      $('loadMsg').textContent='Could not read '+file.name+' — '+(err.message||'unsupported file');
+      F[key] = {name:file.name, sheet:wb.SheetNames[0], cols:hdr, objs:objs};
+      $('loadMsg').textContent = '';
+      paintZone(key);
+      refreshMappingForm();
+    } catch(err){
+      $('loadMsg').textContent = 'Error: ' + (err.message || 'Unsupported file');
     }
   };
-  fr.onerror=function(){ $('loadMsg').textContent='Could not read '+file.name };
   fr.readAsArrayBuffer(file);
 }
+
 function paintZone(key){
-  var f=F[key], d=$('d'+key), b=$('b'+key);
-  if(!f){ d.classList.remove('has');
-    b.innerHTML='<button class="btn'+(key==='M'?' pri':'')+'" data-pick="'+key+'">Choose file</button>';
-    return; }
+  var f = F[key], d = $('d'+key), b = $('b'+key);
+  if(!f){
+    d.classList.remove('has');
+    b.innerHTML = '<button class="btn'+(key==='M'?' pri':'')+'" data-pick="'+key+'">Choose file</button>';
+    return;
+  }
   d.classList.add('has');
-  b.innerHTML='<div class="fname">\u{1F4C4} '+esc(f.name)+
-    '<span class="x" data-clr="'+key+'" title="Remove">×</span></div>'+
-    '<div class="fmeta">'+int(f.objs.length)+' rows · '+f.cols.length+' columns'+
-    (f.sheet?' · '+esc(f.sheet):'')+'</div>'+
+  b.innerHTML = '<div class="fname">📄 ' + esc(f.name) +
+    '<span class="x" data-clr="'+key+'" title="Remove">×</span></div>' +
+    '<div class="fmeta">' + INT.format(f.objs.length) + ' rows · ' + f.cols.length + ' cols</div>' +
     '<button class="btn sm" data-pick="'+key+'" style="margin-top:9px">Change file</button>';
 }
 
-/* --------------------------------------------------------- column maps */
+/* ------------------------------------------------------------- Mapping UI */
 function pick(cols){
-  for(var a=1;a<arguments.length;a++){
-    var want=String(arguments[a]).toLowerCase().replace(/[^a-z0-9]/g,'');
-    for(var i=0;i<cols.length;i++){
-      if(cols[i].toLowerCase().replace(/[^a-z0-9]/g,'')===want) return cols[i];
+  for(var a=1; a<arguments.length; a++){
+    var want = String(arguments[a]).toLowerCase().replace(/[^a-z0-9]/g,'');
+    for(var i=0; i<cols.length; i++){
+      if(cols[i].toLowerCase().replace(/[^a-z0-9]/g,'') === want) return cols[i];
     }
   }
-  for(var b=1;b<arguments.length;b++){
-    var w=String(arguments[b]).toLowerCase().replace(/[^a-z0-9]/g,'');
-    for(var j=0;j<cols.length;j++){
-      if(cols[j].toLowerCase().replace(/[^a-z0-9]/g,'').indexOf(w)>=0) return cols[j];
+  for(var b=1; b<arguments.length; b++){
+    var w = String(arguments[b]).toLowerCase().replace(/[^a-z0-9]/g,'');
+    for(var j=0; j<cols.length; j++){
+      if(cols[j].toLowerCase().replace(/[^a-z0-9]/g,'').indexOf(w) >= 0) return cols[j];
     }
   }
   return '';
 }
-function sel(id,label,cols,cur,hint){
-  var h='<div><label class="maplab" for="'+id+'">'+esc(label)+'</label><select id="'+id+'">';
-  h+='<option value="">— select —</option>';
-  cols.forEach(function(c){ h+='<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+'</option>' });
-  h+='</select>'+(hint?'<div class="msg">'+esc(hint)+'</div>':'')+'</div>';
+
+function sel(id, label, cols, cur, hint){
+  var h = '<div><label class="maplab" for="'+id+'">'+esc(label)+'</label><select id="'+id+'">';
+  h += '<option value="">— Select Column —</option>';
+  cols.forEach(function(c){ h += '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+'</option>'; });
+  h += '</select>' + (hint ? '<div style="font-size:11.5px;color:var(--mut);margin-top:3px">'+esc(hint)+'</div>' : '') + '</div>';
   return h;
 }
-function overlapCount(masterCol,mapFile,mapCol){
-  var seen=new Set(), hits=0, i;
-  for(i=0;i<F.M.objs.length&&i<3000;i++){
-    var k=idKey(F.M.objs[i][masterCol]); if(k) seen.add(k);
+
+function overlapCount(masterCol, mapFile, mapCol){
+  var seen = new Set(), hits = 0;
+  for(var i=0; i<F.M.objs.length && i<3000; i++){
+    var k = idKey(F.M.objs[i][masterCol]); if(k) seen.add(k);
   }
   if(!seen.size) return 0;
-  for(i=0;i<mapFile.objs.length&&i<30000;i++){
-    var v=idKey(mapFile.objs[i][mapCol]); if(v&&seen.has(v)) hits++;
+  for(var j=0; j<mapFile.objs.length && j<30000; j++){
+    var v = idKey(mapFile.objs[j][mapCol]); if(v && seen.has(v)) hits++;
   }
   return hits;
 }
-function bestKeyCol(masterCol,mapFile,fallback){
+
+function bestKeyCol(masterCol, mapFile, fallback){
   if(!masterCol) return fallback;
-  var best='', bestN=0;
+  var best = '', bestN = 0;
   mapFile.cols.forEach(function(c){
-    var n=overlapCount(masterCol,mapFile,c);
-    if(n>bestN){ bestN=n; best=c; }
+    var n = overlapCount(masterCol, mapFile, c);
+    if(n > bestN){ bestN = n; best = c; }
   });
-  return bestN>0?best:fallback;
+  return bestN > 0 ? best : fallback;
 }
-function otherCol(cols,key,preferred){
-  if(preferred&&preferred!==key) return preferred;
-  for(var i=0;i<cols.length;i++) if(cols[i]!==key) return cols[i];
+
+function otherCol(cols, key, preferred){
+  if(preferred && preferred !== key) return preferred;
+  for(var i=0; i<cols.length; i++) if(cols[i] !== key) return cols[i];
   return '';
 }
-function buildMaps(){
-  if(!(F.M&&F.D&&F.P)){ $('mapCard').classList.add('hidden'); return; }
-  var m=F.M.cols,d=F.D.cols,p=F.P.cols;
-  var mDcur=pick(m,'Distributor ERP ID','Distributor Backend ID','Distributor ERPId','DistributorERPID','Distributor ID');
-  var mPcur=pick(m,'Product ERP ID','Product Backend ID','Product ERPId','ProductERPID','Product ID');
-  $('mapMaster').innerHTML=
-     sel('mDist','Distributor ID in this file',m,mDcur)
-    +sel('mProd','Product ID in this file',m,mPcur);
-  var dK=bestKeyCol(mDcur,F.D,pick(d,'Distributor ERP ID','ERP ID','Distributor ID','ERPID'));
-  var pK=bestKeyCol(mPcur,F.P,pick(p,'Product ERP ID','ERP ID','Product ID','ERPID'));
-  $('mapDist').innerHTML=
-     sel('dKey','Matches the master file',d,dK,'The column holding the same IDs as the master file')
-    +sel('dVal','Add this column to every row',d,
-         otherCol(d,dK,pick(d,'Distributor Backend ID','Backend ID','Distributor Backend','BackendID')));
-  $('mapProd').innerHTML=
-     sel('pKey','Matches the master file',p,pK,'The column holding the same IDs as the master file')
-    +sel('pVal','Add this column to every row',p,
-         otherCol(p,pK,pick(p,'Product Backend ID','Backend ID','Product Backend','BackendID')));
+
+function refreshMappingForm(){
+  if(!(F.M && F.D && F.P)){ $('mapCard').classList.add('hidden'); return; }
+  var m = F.M.cols, d = F.D.cols, p = F.P.cols;
+
+  var mDcur = pick(m, 'Distributor ERP ID', 'Distributor Backend ID', 'Distributor ID', 'Distributor');
+  var mPcur = pick(m, 'Product ERP ID', 'Product Backend ID', 'Product ID', 'SKU', 'Material');
+  var mChCur = pick(m, 'Channel', 'Trade', 'Customer Type', 'Segment', 'Type', 'Business Unit');
+
+  $('mapMaster').innerHTML =
+     sel('mDist', 'Distributor ID Column', m, mDcur)
+    +sel('mProd', 'Product ID Column', m, mPcur)
+    +sel('mChan', 'Channel Column (GT / MT / Insti)', m, mChCur, 'Auto-categorizes records into the 3 channel dashboards');
+
+  var dK = bestKeyCol(mDcur, F.D, pick(d, 'Distributor ERP ID', 'Distributor ID', 'ERP ID'));
+  var pK = bestKeyCol(mPcur, F.P, pick(p, 'Product ERP ID', 'Product ID', 'ERP ID', 'SKU'));
+
+  $('mapDist').innerHTML =
+     sel('dKey', 'Key Matching Master File', d, dK)
+    +sel('dVal', 'Mapped Column to Add', d, otherCol(d, dK, pick(d, 'Distributor Backend ID', 'Backend ID')));
+
+  $('mapProd').innerHTML =
+     sel('pKey', 'Key Matching Master File', p, pK)
+    +sel('pVal', 'Mapped Column to Add', p, otherCol(p, pK, pick(p, 'Product Backend ID', 'Backend ID')));
+
   $('mapCard').classList.remove('hidden');
-  $('mDist').onchange=function(){ reRole('d') };
-  $('mProd').onchange=function(){ reRole('p') };
-}
-function reRole(which){
-  var mCol=$(which==='d'?'mDist':'mProd').value;
-  var f=which==='d'?F.D:F.P;
-  var k=bestKeyCol(mCol,f,'');
-  if(!k) return;
-  $(which+'Key').value=k;
-  var v=$(which+'Val');
-  if(v.value===k) v.value=otherCol(f.cols,k,'');
-}
-function refresh(){
-  buildMaps();
-  var ready=!!(F.M&&F.D&&F.P);
-  if($('runBtn')) $('runBtn').disabled=!ready;
-  if(!ready){ $('out').classList.add('hidden'); R=null; }
 }
 
-/* ------------------------------------------------------------ matching */
-function buildIndex(file,erpCol,backCol){
-  var map=new Map(), conflicts=new Map(), dupes=0, blank=0;
-  for(var i=0;i<file.objs.length;i++){
-    var o=file.objs[i];
-    var k=idKey(o[erpCol]); var b=idText(o[backCol]);
-    if(!k){ blank++; continue; }
-    if(!map.has(k)){ map.set(k,b); continue; }
-    var prev=map.get(k);
-    if(prev===b){ dupes++; continue; }
-    var set=conflicts.get(k);
-    if(!set){ set=new Set([prev]); conflicts.set(k,set); }
+/* ------------------------------------------------------------- Matching & Categorization */
+function determineChannel(val){
+  if(!val) return 'GT';
+  var s = String(val).trim().toUpperCase();
+  if(s.includes('MODERN') || s==='MT' || s.includes('KEY ACCOUNT') || s.includes('CHAINS')) return 'MT';
+  if(s.includes('INST') || s.includes('HORECA') || s.includes('HOSPITAL') || s.includes('CORP') || s.includes('B2B') || s.includes('GOVT')) return 'INSTI';
+  return 'GT';
+}
+
+function buildIndex(file, erpCol, backCol){
+  var map = new Map(), conflicts = new Map(), dupes = 0;
+  for(var i=0; i<file.objs.length; i++){
+    var o = file.objs[i];
+    var k = idKey(o[erpCol]); var b = idText(o[backCol]);
+    if(!k) continue;
+    if(!map.has(k)){ map.set(k, b); continue; }
+    var prev = map.get(k);
+    if(prev === b){ dupes++; continue; }
+    var set = conflicts.get(k);
+    if(!set){ set = new Set([prev]); conflicts.set(k, set); }
     set.add(b);
   }
-  return {map:map,conflicts:conflicts,dupes:dupes,blank:blank};
+  return {map:map, conflicts:conflicts, dupes:dupes};
 }
 
-function run(){
-  var mD=$('mDist').value, mP=$('mProd').value,
-      dK=$('dKey').value, dV=$('dVal').value,
-      pK=$('pKey').value, pV=$('pVal').value;
-  var miss=[];
-  if(!mD) miss.push('the distributor ID column in the master file');
-  if(!mP) miss.push('the product ID column in the master file');
-  if(!dK||!dV) miss.push('both columns in the distributor mapping file');
-  if(!pK||!pV) miss.push('both columns in the product mapping file');
-  if(dK&&dK===dV) miss.push('two DIFFERENT columns in the distributor mapping file');
-  if(pK&&pK===pV) miss.push('two DIFFERENT columns in the product mapping file');
-  if(miss.length){ $('runMsg').textContent='Still to choose: '+miss.join('; ')+'.'; return; }
-  $('runMsg').textContent='';
+function runMatch(){
+  var mD = $('mDist').value, mP = $('mProd').value, mCh = $('mChan').value;
+  var dK = $('dKey').value, dV = $('dVal').value;
+  var pK = $('pKey').value, pV = $('pVal').value;
 
-  var di=buildIndex(F.D,dK,dV), pi=buildIndex(F.P,pK,pV);
-  var rows=[], nMatch=0,nNoD=0,nNoP=0,nNoBoth=0,nConf=0,nBlank=0;
+  if(!mD || !mP || !dK || !dV || !pK || !pV){
+    $('runMsg').textContent = 'Please select all required Distributor and Product columns.';
+    return;
+  }
+  $('runMsg').textContent = '';
 
-  for(var i=0;i<F.M.objs.length;i++){
-    var o=F.M.objs[i];
-    var dErpRaw=idText(o[mD]), pErpRaw=idText(o[mP]);
-    var dk=idKey(o[mD]), pk=idKey(o[mP]);
+  var di = buildIndex(F.D, dK, dV);
+  var pi = buildIndex(F.P, pK, pV);
+  var rows = [];
+
+  for(var i=0; i<F.M.objs.length; i++){
+    var o = F.M.objs[i];
+    var dErpRaw = idText(o[mD]), pErpRaw = idText(o[mP]);
+    var dk = idKey(o[mD]), pk = idKey(o[mP]);
     var dBack = dk && di.map.has(dk) ? di.map.get(dk) : '';
     var pBack = pk && pi.map.has(pk) ? pi.map.get(pk) : '';
-    var dFound = dk!=='' && di.map.has(dk), pFound = pk!=='' && pi.map.has(pk);
+    var dFound = dk !== '' && di.map.has(dk);
+    var pFound = pk !== '' && pi.map.has(pk);
 
-    var notes=[];
-    if(!dk||!pk){ nBlank++; notes.push('ID blank in the master file'); }
+    var notes = [];
+    if(!dk || !pk) notes.push('Blank ID');
     var dConf = dk && di.conflicts.has(dk), pConf = pk && pi.conflicts.has(pk);
-    if(dConf) notes.push('Conflicting distributor mapping ('+
-      Array.from(di.conflicts.get(dk)).join(', ')+')');
-    if(pConf) notes.push('Conflicting product mapping ('+
-      Array.from(pi.conflicts.get(pk)).join(', ')+')');
-    if(dConf||pConf) nConf++;
+    if(dConf) notes.push('Conflicting Distributor');
+    if(pConf) notes.push('Conflicting Product');
 
     var status;
-    if(dFound&&pFound){ status='Matched'; nMatch++; }
-    else if(!dFound&&!pFound){ status='Both Mappings Not Found'; nNoBoth++; }
-    else if(!dFound){ status='Distributor Mapping Not Found'; nNoD++; }
-    else { status='Product Mapping Not Found'; nNoP++; }
-    if(status!=='Matched') notes.unshift('Check Required');
+    if(dFound && pFound) status = 'Matched';
+    else if(!dFound && !pFound) status = 'Both Not Found';
+    else if(!dFound) status = 'Distributor Not Found';
+    else status = 'Product Not Found';
 
-    rows.push({src:o,dErp:dErpRaw,pErp:pErpRaw,dBack:dBack,pBack:pBack,
-      status:status,note:notes.join(' · '),
-      ok:status==='Matched',conflict:!!(dConf||pConf)});
+    var chVal = mCh ? determineChannel(o[mCh]) : 'GT';
+
+    rows.push({
+      src: o,
+      channel: chVal,
+      dErp: dErpRaw,
+      dBack: dBack,
+      pErp: pErpRaw,
+      pBack: pBack,
+      status: status,
+      notes: notes.join(' · '),
+      ok: status === 'Matched',
+      conflict: !!(dConf || pConf)
+    });
   }
 
-  R={rows:rows,cols:{mD:mD,mP:mP,dOut:dV,pOut:pV},di:di,pi:pi,
-     n:{match:nMatch,noD:nNoD,noP:nNoP,noBoth:nNoBoth,conf:nConf,blank:nBlank}};
-  VIEW='all';
-  render();
+  PUBLISHED_DATA = {
+    rows: rows,
+    masterCols: F.M.cols,
+    dName: dV,
+    pName: pV,
+    updated: new Date().toISOString()
+  };
+
+  $('publishBtn').classList.remove('hidden');
+  toast('Matched ' + INT.format(rows.length) + ' records. Click Publish to update Live Dashboards.');
+  renderDashboard();
 }
 
-/* ------------------------------------------------------------ renderer */
-function render(){
-  var rows=R.rows, n=R.n, total=rows.length;
-  var failD=n.noD+n.noBoth, failP=n.noP+n.noBoth;
-  var pct=total?(n.match/total*100):0;
-  var o=$('out'); o.classList.remove('hidden'); o.innerHTML='';
-
-  var card=el('div','card');
-  var ch=el('div','ch');
-  ch.appendChild(el('span','step','3'));
-  ch.appendChild(el('h2',null,'Result'));
-  ch.appendChild(el('p',null,F.M.name));
-  card.appendChild(ch);
-  var pad=el('div','pad'); card.appendChild(pad);
-
-  var tiles=[
-    ['Master records',int(total),'rows carried through',''],
-    ['Successfully matched',int(n.match),'both IDs resolved',n.match===total?'good':''],
-    ['Distributor failures',int(failD),'ID not found in mapping',failD?'bad':'good'],
-    ['Product failures',int(failP),'ID not found in mapping',failP?'bad':'good'],
-    ['Conflicting mappings',int(n.conf),'one ID, two different values',n.conf?'warn':'good'],
-    ['Match rate',pct.toFixed(1)+'%','of all records',pct>99.999?'good':(pct<90?'bad':'warn')]
-  ];
-  var g=el('div','grid');
-  tiles.forEach(function(t){
-    var d=el('div','tile '+(t[3]||''));
-    d.appendChild(el('div','lab',t[0]));
-    d.appendChild(el('div','num',t[1]));
-    d.appendChild(el('div','foot',t[2]));
-    g.appendChild(d);
-  });
-  pad.appendChild(g);
-
-  var w=[];
-  w.push('<b>'+int(n.match)+'</b> of <b>'+int(total)+'</b> records matched on both IDs ('+
-    pct.toFixed(1)+'%). Every record stays in the export, matched or not.');
-  if(failD||failP){
-    var bits=[];
-    if(failD) bits.push('<b>'+int(failD)+'</b> with a distributor ID that is not in the mapping file');
-    if(failP) bits.push('<b>'+int(failP)+'</b> with a product ID that is not in the mapping file');
-    w.push(bits.join(', and ')+'. These carry <b>Check Required</b> and an empty backend ID.');
+/* ------------------------------------------------------------- Dashboard Rendering */
+function renderDashboard(){
+  if(!PUBLISHED_DATA || !PUBLISHED_DATA.rows.length){
+    $('noDataNotice').classList.remove('hidden');
+    $('dashContent').classList.add('hidden');
+    return;
   }
-  if(n.noBoth) w.push('<b>'+int(n.noBoth)+'</b> record'+(n.noBoth===1?'':'s')+
-    ' failed on both IDs at once — worth checking whether the right mapping files were loaded.');
-  if(n.conf) w.push('<b>'+int(n.conf)+'</b> record'+(n.conf===1?' draws':'s draw')+
-    ' on an ID that appears more than once in a mapping file resolving to <b>different</b> values. '+
-    'The first value found has been used and the alternatives are listed in the note, but these need settling at source.');
-  var benign=R.di.dupes+R.pi.dupes;
-  if(benign) w.push('<b>'+int(benign)+'</b> duplicate row'+(benign===1?'':'s')+
-    ' in the mapping files repeat an ID with the same value. Harmless, and ignored.');
-  if(n.blank) w.push('<b>'+int(n.blank)+'</b> master record'+(n.blank===1?' has':'s have')+
-    ' a blank ID and cannot be matched at all.');
-  if(R.di.blank+R.pi.blank) w.push('<b>'+int(R.di.blank+R.pi.blank)+'</b> mapping row'+
-    ((R.di.blank+R.pi.blank)===1?'':'s')+' had a blank ID and were skipped.');
-  var note=el('div','note '+((failD||failP||n.conf)?'':'g'));
-  note.innerHTML=w.join('<br><br>');
-  pad.appendChild(note);
+  $('noDataNotice').classList.add('hidden');
+  $('dashContent').classList.remove('hidden');
 
-  var fl=el('div','filters');
-  [['all','Everything',total],
-   ['matched','Matched',n.match],
-   ['issues','Needs checking',total-n.match],
-   ['conflict','Conflicts',n.conf]].forEach(function(f){
-    var b=el('button','btn sm'+(VIEW===f[0]?' pri':''),f[1]+' ('+int(f[2])+')');
-    b.onclick=function(){ VIEW=f[0]; render(); };
-    if(!f[2]&&f[0]!=='all') b.disabled=true;
-    fl.appendChild(b);
+  var all = PUBLISHED_DATA.rows;
+  var gt = all.filter(function(r){ return r.channel === 'GT'; });
+  var mt = all.filter(function(r){ return r.channel === 'MT'; });
+  var insti = all.filter(function(r){ return r.channel === 'INSTI'; });
+
+  $('cntALL').textContent = INT.format(all.length);
+  $('cntGT').textContent = INT.format(gt.length);
+  $('cntMT').textContent = INT.format(mt.length);
+  $('cntINSTI').textContent = INT.format(insti.length);
+
+  var activeList = all;
+  if(ACTIVE_CHANNEL === 'GT') activeList = gt;
+  else if(ACTIVE_CHANNEL === 'MT') activeList = mt;
+  else if(ACTIVE_CHANNEL === 'INSTI') activeList = insti;
+
+  /* KPI calculations */
+  var total = activeList.length;
+  var matched = activeList.filter(function(r){ return r.ok; }).length;
+  var issues = total - matched;
+  var conflicts = activeList.filter(function(r){ return r.conflict; }).length;
+  var rate = total ? (matched / total * 100).toFixed(1) : '0.0';
+
+  var kg = $('kpiGrid');
+  kg.innerHTML = '';
+  var tiles = [
+    ['Total Records', INT.format(total), (ACTIVE_CHANNEL==='ALL'?'All Channels':ACTIVE_CHANNEL)+' scope', ''],
+    ['Successfully Matched', INT.format(matched), 'Both IDs mapped', matched===total?'good':''],
+    ['Pending Issues', INT.format(issues), 'Missing mappings', issues>0?'bad':'good'],
+    ['Conflicts', INT.format(conflicts), 'Multiple IDs found', conflicts>0?'warn':'good'],
+    ['Match Rate', rate + '%', 'Resolution percentage', rate>95?'good':'warn']
+  ];
+  tiles.forEach(function(t){
+    var d = el('div', 'tile ' + t[3]);
+    d.appendChild(el('div', 'lab', t[0]));
+    d.appendChild(el('div', 'num', t[1]));
+    d.appendChild(el('div', 'foot', t[2]));
+    kg.appendChild(d);
   });
-  pad.appendChild(fl);
 
-  var shown=rows.filter(function(r){
-    return VIEW==='all'||(VIEW==='matched'&&r.ok)||
-           (VIEW==='issues'&&!r.ok)||(VIEW==='conflict'&&r.conflict);
+  /* Table rendering */
+  var tb = $('dataBody');
+  tb.innerHTML = '';
+  var filtered = activeList.filter(function(r){
+    if(STATUS_FILTER === 'MATCHED' && !r.ok) return false;
+    if(STATUS_FILTER === 'ISSUES' && r.ok) return false;
+    if(STATUS_FILTER === 'CONFLICT' && !r.conflict) return false;
+    if(SEARCH_TERM){
+      var q = SEARCH_TERM.toLowerCase();
+      var match = (r.dErp && r.dErp.toLowerCase().includes(q)) ||
+                  (r.dBack && r.dBack.toLowerCase().includes(q)) ||
+                  (r.pErp && r.pErp.toLowerCase().includes(q)) ||
+                  (r.pBack && r.pBack.toLowerCase().includes(q)) ||
+                  (r.channel && r.channel.toLowerCase().includes(q));
+      if(!match) return false;
+    }
+    return true;
   });
-  var CAP=300, slice=shown.slice(0,CAP);
-  var priceCols=F.M.cols.filter(function(c){
-    return c!==R.cols.mD && c!==R.cols.mP;
-  }).slice(0,4);
 
-  var tw=el('div','tblwrap'), t=el('table');
-  var thead=el('thead'), hr=el('tr');
-  [R.cols.mD,R.cols.dOut,R.cols.mP,R.cols.pOut]
-    .concat(priceCols).concat(['Status','Note']).forEach(function(h){
-      hr.appendChild(el('th',null,h)) });
-  thead.appendChild(hr); t.appendChild(thead);
-  var tb=el('tbody');
+  var slice = filtered.slice(0, 150);
   slice.forEach(function(r){
-    var tr=el('tr');
-    tr.appendChild(el('td','mono',r.dErp||'—'));
-    var c2=el('td','mono'); if(r.dBack) c2.textContent=r.dBack;
-      else c2.appendChild(el('span','pill p-bad','not found')); tr.appendChild(c2);
-    tr.appendChild(el('td','mono',r.pErp||'—'));
-    var c4=el('td','mono'); if(r.pBack) c4.textContent=r.pBack;
-      else c4.appendChild(el('span','pill p-bad','not found')); tr.appendChild(c4);
-    priceCols.forEach(function(c){
-      var v=r.src[c]; var td=el('td',typeof v==='number'?'n mono':null,
-        v==null||v===''?'—':String(v)); tr.appendChild(td) });
-    var st=el('td');
-    st.appendChild(el('span','pill '+(r.ok?'p-ok':'p-bad'),r.status));
-    tr.appendChild(st);
-    var nt=el('td'); nt.style.whiteSpace='normal';
-    if(r.conflict) nt.appendChild(el('span','pill p-warn','conflict'));
-    if(r.note){ var s=el('span',null,' '+r.note); s.style.fontSize='12px'; nt.appendChild(s) }
-    tr.appendChild(nt);
+    var tr = el('tr');
+    var chBadge = el('span', 'pill p-' + r.channel.toLowerCase(), r.channel);
+    var tdCh = el('td'); tdCh.appendChild(chBadge); tr.appendChild(tdCh);
+
+    tr.appendChild(el('td', 'mono', r.dErp || '—'));
+    var tdD = el('td', 'mono');
+    if(r.dBack) tdD.textContent = r.dBack;
+    else tdD.appendChild(el('span', 'pill p-bad', 'Not Found'));
+    tr.appendChild(tdD);
+
+    tr.appendChild(el('td', 'mono', r.pErp || '—'));
+    var tdP = el('td', 'mono');
+    if(r.pBack) tdP.textContent = r.pBack;
+    else tdP.appendChild(el('span', 'pill p-bad', 'Not Found'));
+    tr.appendChild(tdP);
+
+    var tdSt = el('td');
+    tdSt.appendChild(el('span', 'pill ' + (r.ok ? 'p-ok' : 'p-bad'), r.status));
+    tr.appendChild(tdSt);
+
+    var tdNt = el('td', null, r.notes || '—');
+    tr.appendChild(tdNt);
     tb.appendChild(tr);
   });
+
   if(!slice.length){
-    var tr0=el('tr'); var td0=el('td',null,'Nothing in this view.');
-    td0.colSpan=6+priceCols.length; td0.style.cssText='text-align:center;color:var(--mut);padding:20px';
-    tr0.appendChild(td0); tb.appendChild(tr0);
+    var tr0 = el('tr');
+    var td0 = el('td', null, 'No records found matching this view/search.');
+    td0.colSpan = 7; td0.style.cssText = 'text-align:center;padding:25px;color:var(--mut)';
+    tr0.appendChild(td0);
+    tb.appendChild(tr0);
   }
-  t.appendChild(tb); tw.appendChild(t); pad.appendChild(tw);
-  var cnt=el('p','cnt',int(shown.length)+' record'+(shown.length===1?'':'s')+' in this view'+
-    (shown.length>CAP?' — first '+CAP+' shown; the export contains all of them':'')+
-    '. The preview shows the first four pricing columns; the export carries every column.');
-  pad.appendChild(cnt);
 
-  var bar=el('div','runbar');
-  var bx=el('button','btn pri','↓ Export Excel'); bx.onclick=function(){ exportFile('xlsx') };
-  var bc=el('button','btn','↓ Export CSV'); bc.onclick=function(){ exportFile('csv') };
-  var br=el('button','btn','Reset'); br.onclick=doReset;
-  bar.appendChild(bx); bar.appendChild(bc); bar.appendChild(br);
-  pad.appendChild(bar);
-
-  $('out').appendChild(card);
-  $('out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  $('tableNotice').textContent = 'Showing ' + INT.format(slice.length) + ' of ' + INT.format(filtered.length) + ' records. The exported file contains all rows.';
 }
 
-/* -------------------------------------------------------------- export */
-function uniqName(name,taken){
-  var n=name||'Mapped ID', i=2;
-  while(taken.indexOf(n)>=0){ n=(name||'Mapped ID')+' ('+i+')'; i++; }
-  return n;
-}
-function buildOut(){
-  var mD=R.cols.mD, mP=R.cols.mP;
-  var dName=uniqName(R.cols.dOut,F.M.cols);
-  var pName=uniqName(R.cols.pOut,F.M.cols.concat([dName]));
-  var cols=[];
-  F.M.cols.forEach(function(c){
-    cols.push(c);
-    if(c===mD) cols.push(dName);
-    if(c===mP) cols.push(pName);
+/* ------------------------------------------------------------- Export Functions */
+function exportDataset(kind){
+  if(!PUBLISHED_DATA || !PUBLISHED_DATA.rows.length) return;
+  var rows = PUBLISHED_DATA.rows;
+  if(ACTIVE_CHANNEL !== 'ALL') {
+    rows = rows.filter(function(r){ return r.channel === ACTIVE_CHANNEL; });
+  }
+
+  var aoa = [['Channel', 'Distributor ERP', PUBLISHED_DATA.dName || 'Mapped Distributor', 'Product ERP', PUBLISHED_DATA.pName || 'Mapped Product', 'Status', 'Notes']];
+  rows.forEach(function(r){
+    aoa.push([r.channel, r.dErp, r.dBack, r.pErp, r.pBack, r.status, r.notes]);
   });
-  cols.push('Status','Mapping Note');
-  var aoa=[cols];
-  R.rows.forEach(function(r){
-    var row=[];
-    F.M.cols.forEach(function(c){
-      row.push(r.src[c]==null?'':r.src[c]);
-      if(c===mD) row.push(r.dBack);
-      if(c===mP) row.push(r.pBack);
-    });
-    row.push(r.status, r.note);
-    aoa.push(row);
-  });
-  return {cols:cols,aoa:aoa,dName:dName,pName:pName};
-}
-function csvText(aoa){
-  return aoa.map(function(r){ return r.map(function(c){
-    var s=(c==null?'':String(c));
-    return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
-  }).join(',') }).join('\r\n');
-}
-async function offer(filename,data,mime){
-  if(DL){
-    try{ await DL.save({filename:filename,data:data}); toast('Saved '+filename); return }
-    catch(e){ if(e&&e.code==='declined') return;
-      toast('Download is not available in this view'); return }
-  }
-  try{
-    var blob=data instanceof Blob?data:new Blob([data],{type:mime||'text/plain'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename;
-    a.click(); setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
-  }catch(e){ toast('Download is not available in this view') }
-}
-function exportFile(kind){
-  var out=buildOut();
-  var base=(F.M.name||'master_pricing').replace(/\.[^.]+$/,'').replace(/[^\w\-]+/g,'_');
-  if(kind==='csv'){ offer(base+'_mapped.csv',csvText(out.aoa),'text/csv'); return }
-  var wb=XLSX.utils.book_new();
-  var ws=XLSX.utils.aoa_to_sheet(out.aoa);
-  var idCols=[];
-  out.cols.forEach(function(c,i){
-    if(c===R.cols.mD||c===R.cols.mP||c===out.dName||c===out.pName) idCols.push(i);
-  });
-  for(var r=1;r<out.aoa.length;r++){
-    idCols.forEach(function(ci){
-      var ref=XLSX.utils.encode_cell({r:r,c:ci}); var cell=ws[ref];
-      if(cell&&cell.v!==''&&cell.v!=null){ cell.t='s'; cell.v=String(cell.v); cell.z='@'; }
-    });
-  }
-  XLSX.utils.book_append_sheet(wb,ws,'Mapped Pricing');
 
-  var n=R.n, total=R.rows.length;
-  var sum=[['Master Pricing ID Mapping'],[],
-    ['Master file',F.M.name],['Distributor mapping',F.D.name],['Product mapping',F.P.name],[],
-    ['Master records',total],
-    ['Successfully matched',n.match],
-    ['Distributor mapping not found',n.noD+n.noBoth],
-    ['Product mapping not found',n.noP+n.noBoth],
-    ['Both mappings not found',n.noBoth],
-    ['Records on a conflicting mapping',n.conf],
-    ['Benign duplicate mapping rows',R.di.dupes+R.pi.dupes],
-    ['Blank ID in master',n.blank],
-    ['Match rate',(total?(n.match/total*100):0).toFixed(2)+'%'],[],
-    ['Generated',new Date().toISOString().slice(0,19).replace('T',' ')]];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'Summary');
-
-  var ex=R.rows.filter(function(r){return !r.ok||r.conflict});
-  if(ex.length){
-    var eaoa=[[R.cols.mD,out.dName,R.cols.mP,out.pName,'Status','Mapping Note']];
-    ex.forEach(function(r){ eaoa.push([r.dErp,r.dBack,r.pErp,r.pBack,r.status,r.note]) });
-    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(eaoa),'Exceptions');
+  var filename = (ACTIVE_CHANNEL === 'ALL' ? 'All_Channels' : ACTIVE_CHANNEL) + '_Pricing_' + new Date().toISOString().slice(0,10);
+  if(kind === 'csv'){
+    var csv = aoa.map(function(r){ return r.map(function(c){ return '"' + String(c||'').replace(/"/g,'""') + '"'; }).join(','); }).join('\r\n');
+    var blob = new Blob([csv], {type:'text/csv'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename + '.csv'; a.click();
+    return;
   }
-  var buf=XLSX.write(wb,{bookType:'xlsx',type:'array'});
-  offer(base+'_mapped.xlsx',
-    new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+
+  var wb = XLSX.utils.book_new();
+  var ws = XLSX.utils.aoa_to_sheet(aoa);
+  XLSX.utils.book_append_sheet(wb, ws, ACTIVE_CHANNEL + ' Pricing');
+  XLSX.writeFile(wb, filename + '.xlsx');
 }
 
-/* --------------------------------------------------------------- wiring */
-function doReset(){
-  F={M:null,D:null,P:null}; R=null; VIEW='all';
-  ['M','D','P'].forEach(function(k){ $('i'+k).value=''; paintZone(k) });
-  $('out').classList.add('hidden'); $('out').innerHTML='';
-  $('mapCard').classList.add('hidden'); $('loadMsg').textContent='';
-  if($('runMsg')) $('runMsg').textContent='';
-  toast('Cleared');
-}
-document.addEventListener('click',function(e){
-  var p=e.target.closest?e.target.closest('[data-pick]'):null;
-  if(p){ $('i'+p.getAttribute('data-pick')).click(); return }
-  var c=e.target.closest?e.target.closest('[data-clr]'):null;
-  if(c){ var k=c.getAttribute('data-clr'); F[k]=null; $('i'+k).value=''; paintZone(k); refresh() }
+/* ------------------------------------------------------------- Event Handlers */
+document.querySelectorAll('.channel-nav .tab').forEach(function(tab){
+  tab.onclick = function(){
+    document.querySelectorAll('.channel-nav .tab').forEach(function(t){ t.classList.remove('active'); });
+    tab.classList.add('active');
+    ACTIVE_CHANNEL = tab.getAttribute('data-channel');
+    renderDashboard();
+  };
 });
+
+document.querySelectorAll('.filters button').forEach(function(btn){
+  btn.onclick = function(){
+    document.querySelectorAll('.filters button').forEach(function(b){ b.classList.remove('pri'); });
+    btn.classList.add('pri');
+    STATUS_FILTER = btn.getAttribute('data-status');
+    renderDashboard();
+  };
+});
+
+$('searchBox').oninput = function(e){
+  SEARCH_TERM = e.target.value.trim();
+  renderDashboard();
+};
+
+$('runBtn').onclick = runMatch;
+$('publishBtn').onclick = function(){
+  try {
+    localStorage.setItem('PRICING_PUBLISHED_DATA', JSON.stringify(PUBLISHED_DATA));
+    toast('🚀 Published successfully! Visible to all viewers.');
+    setRole('viewer');
+    renderDashboard();
+  } catch(e){
+    toast('Published for this active session (Storage full)');
+    setRole('viewer');
+    renderDashboard();
+  }
+};
+
+$('exportChannelBtn').onclick = function(){ exportDataset('xlsx'); };
+$('exportCsvBtn').onclick = function(){ exportDataset('csv'); };
+
+$('resetBtn').onclick = function(){
+  F = {M:null, D:null, P:null};
+  ['M','D','P'].forEach(function(k){ $('i'+k).value=''; paintZone(k); });
+  $('mapCard').classList.add('hidden');
+  $('publishBtn').classList.add('hidden');
+};
+
+document.addEventListener('click', function(e){
+  var p = e.target.closest ? e.target.closest('[data-pick]') : null;
+  if(p){ $('i' + p.getAttribute('data-pick')).click(); return; }
+  var c = e.target.closest ? e.target.closest('[data-clr]') : null;
+  if(c){ var k = c.getAttribute('data-clr'); F[k]=null; $('i'+k).value=''; paintZone(k); refreshMappingForm(); }
+});
+
 ['M','D','P'].forEach(function(k){
-  $('i'+k).addEventListener('change',function(e){ if(e.target.files[0]) readFile(e.target.files[0],k) });
-  var d=$('d'+k);
-  d.addEventListener('dragover',function(e){ e.preventDefault(); d.classList.add('over') });
-  d.addEventListener('dragleave',function(){ d.classList.remove('over') });
-  d.addEventListener('drop',function(e){ e.preventDefault(); d.classList.remove('over');
-    if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0],k) });
+  $('i'+k).addEventListener('change', function(e){ if(e.target.files[0]) readFile(e.target.files[0], k); });
+  var d = $('d'+k);
+  d.addEventListener('dragover', function(e){ e.preventDefault(); d.classList.add('over'); });
+  d.addEventListener('dragleave', function(){ d.classList.remove('over'); });
+  d.addEventListener('drop', function(e){ e.preventDefault(); d.classList.remove('over'); if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0], k); });
 });
-document.addEventListener('click',function(e){
-  if(e.target&&e.target.id==='runBtn') run();
-  if(e.target&&e.target.id==='resetBtn') doReset();
-});
-(async function(){
-  try{ DL=(typeof claude!=='undefined'&&claude.use)?await claude.use('downloads'):null }catch(e){ DL=null }
+
+/* Init: Load any saved published data from local storage */
+(function init(){
+  try {
+    var saved = localStorage.getItem('PRICING_PUBLISHED_DATA');
+    if(saved){
+      PUBLISHED_DATA = JSON.parse(saved);
+      renderDashboard();
+    }
+  } catch(e){}
 })();
-refresh();
-</script></body></html>
+</script>
+</body>
+</html>
