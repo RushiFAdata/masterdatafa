@@ -29,7 +29,7 @@ h1,h2,h3{margin:0;font-weight:680;letter-spacing:-.018em}
 button{font:inherit;color:inherit}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
-.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1380px;margin:0 auto;padding:0 20px}
 .nav-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:12px}
 .brand{display:flex;align-items:center;gap:10px}
 .badge{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -86,7 +86,7 @@ select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab .cnt-pill{font-size:11px;background:var(--surface);padding:1px 6px;border-radius:99px;border:1px solid var(--line)}
 
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 @media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:620px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;min-width:0}
@@ -99,10 +99,10 @@ select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .searchbox{max-width:280px;min-width:180px}
 
-/* Tables */
-.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+/* Table */
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);max-height:650px}
 table{width:100%;border-collapse:collapse;font-size:12.8px}
-th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0}
+th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0;z-index:2}
 td{padding:8px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
 tr:last-child td{border-bottom:0}
 td.n{text-align:right}
@@ -110,9 +110,9 @@ td.n{text-align:right}
 .p-ok{color:var(--good);background:var(--goodbg)}
 .p-bad{color:var(--bad);background:var(--badbg)}
 .p-warn{color:var(--warn);background:var(--warnbg)}
-.p-gt{color:var(--gt-color);background:color-mix(in srgb,var(--gt-color) 12%,transparent)}
-.p-mt{color:var(--mt-color);background:color-mix(in srgb,var(--mt-color) 12%,transparent)}
-.p-insti{color:var(--insti-color);background:color-mix(in srgb,var(--insti-color) 12%,transparent)}
+.p-gt{color:var(--gt-color);background:color-mix(in srgb,var(--gt-color) 12%,transparent);border:1px solid var(--gt-color)}
+.p-mt{color:var(--mt-color);background:color-mix(in srgb,var(--mt-color) 12%,transparent);border:1px solid var(--mt-color)}
+.p-insti{color:var(--insti-color);background:color-mix(in srgb,var(--insti-color) 12%,transparent);border:1px solid var(--insti-color)}
 
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -124,7 +124,7 @@ td.n{text-align:right}
 <header><div class="wrap">
   <div class="nav-row">
     <div class="brand">
-      <h1>Master Pricing Portal</h1>
+      <h1>Master Pricing & Channel Portal</h1>
       <span class="badge b-viewer" id="roleBadge">Viewer Dashboard</span>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
@@ -135,12 +135,12 @@ td.n{text-align:right}
 
 <main><div class="wrap">
 
-  <!-- ADMIN STUDIO: Upload & Mapping (Hidden in Viewer Mode) -->
+  <!-- ADMIN STUDIO: Upload & Mapping (Hidden for Viewers) -->
   <section id="adminStudio" class="hidden">
     <div class="card">
       <div class="ch">
         <div><h2><span class="step">1</span>Admin Data Studio — Load Mapping Files</h2>
-        <p>Upload your 3 source files. When matched, publish to make the 3 channel dashboards live.</p></div>
+        <p>Upload your 3 source files. When matched, publish to make the GT, MT & Insti dashboards live.</p></div>
         <button class="btn sm" id="exitAdminBtn">Exit to Viewer</button>
       </div>
       <div class="pad">
@@ -148,7 +148,7 @@ td.n{text-align:right}
           <div class="drop" id="dM">
             <div class="zt">File A &mdash; Required</div>
             <div class="zn">Master Pricing</div>
-            <div class="zd">Pricing columns with Distributor, Product & Channel</div>
+            <div class="zd">Pricing columns with Distributor, Product & Company ID</div>
             <div id="bM"><button class="btn pri" data-pick="M">Choose file</button></div>
           </div>
           <div class="drop" id="dD">
@@ -173,11 +173,11 @@ td.n{text-align:right}
 
     <div class="card hidden" id="mapCard">
       <div class="ch">
-        <div><h2><span class="step">2</span>Confirm Columns & Channels</h2>
-        <p>Auto-detected by checking real data overlap. Verify distributor, product, and channel mapping.</p></div>
+        <div><h2><span class="step">2</span>Confirm Columns & Company ID Mapping</h2>
+        <p>11482 = GT, 162179 = MT, 182386 = Institutional. Verify the columns below:</p></div>
       </div>
       <div class="pad">
-        <div class="sect">Master Pricing File Mapping</div>
+        <div class="sect">Master Pricing File Columns</div>
         <div class="mapgrid" id="mapMaster"></div>
         <div class="sect">Distributor Mapping File</div>
         <div class="mapgrid" id="mapDist"></div>
@@ -198,14 +198,14 @@ td.n{text-align:right}
     <div class="card">
       <div class="channel-nav">
         <button class="tab active" data-channel="ALL">🌐 All Channels <span class="cnt-pill" id="cntALL">0</span></button>
-        <button class="tab" data-channel="GT">🏢 General Trade (GT) <span class="cnt-pill" id="cntGT">0</span></button>
-        <button class="tab" data-channel="MT">🛒 Modern Trade (MT) <span class="cnt-pill" id="cntMT">0</span></button>
-        <button class="tab" data-channel="INSTI">🏥 Institutional (Insti) <span class="cnt-pill" id="cntINSTI">0</span></button>
+        <button class="tab" data-channel="GT">🏢 General Trade (GT · 11482) <span class="cnt-pill" id="cntGT">0</span></button>
+        <button class="tab" data-channel="MT">🛒 Modern Trade (MT · 162179) <span class="cnt-pill" id="cntMT">0</span></button>
+        <button class="tab" data-channel="INSTI">🏥 Institutional (Insti · 182386) <span class="cnt-pill" id="cntINSTI">0</span></button>
       </div>
 
       <div class="pad">
         <div id="noDataNotice" style="text-align:center;padding:45px 15px">
-          <h3>No Live Data Published Yet</h3>
+          <h3>No Live Pricing Data Published Yet</h3>
           <p style="color:var(--mut);max-width:550px;margin:8px auto 16px">
             The dashboards are waiting for published pricing data. If you are an admin, click "Admin Login" above to map and publish your files.
           </p>
@@ -223,7 +223,7 @@ td.n{text-align:right}
               <button class="btn sm" data-status="CONFLICT" id="fConflict">Conflicts</button>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
-              <input type="search" id="searchBox" class="searchbox" placeholder="Search Distributor, SKU...">
+              <input type="search" id="searchBox" class="searchbox" placeholder="Search SKU, Distributor, Price...">
               <button class="btn sm pri" id="exportChannelBtn">↓ Export Excel</button>
               <button class="btn sm" id="exportCsvBtn">↓ CSV</button>
             </div>
@@ -231,17 +231,7 @@ td.n{text-align:right}
 
           <div class="tblwrap">
             <table id="dataTable">
-              <thead>
-                <tr>
-                  <th>Channel</th>
-                  <th>Distributor ERP</th>
-                  <th>Mapped Distributor</th>
-                  <th>Product ERP</th>
-                  <th>Mapped Product</th>
-                  <th>Status</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
+              <thead id="dataHeader"></thead>
               <tbody id="dataBody"></tbody>
             </table>
           </div>
@@ -253,7 +243,6 @@ td.n{text-align:right}
 
 </main>
 
-<!-- Load SheetJS for Excel & CSV parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
@@ -264,7 +253,7 @@ function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ re
 var INT = new Intl.NumberFormat('en-IN');
 
 /* State Variables */
-var ROLE = 'viewer'; // 'viewer' or 'admin'
+var ROLE = 'viewer';
 var ADMIN_PIN = 'admin123';
 var ACTIVE_CHANNEL = 'ALL';
 var STATUS_FILTER = 'ALL';
@@ -422,12 +411,12 @@ function refreshMappingForm(){
 
   var mDcur = pick(m, 'Distributor ERP ID', 'Distributor Backend ID', 'Distributor ID', 'Distributor');
   var mPcur = pick(m, 'Product ERP ID', 'Product Backend ID', 'Product ID', 'SKU', 'Material');
-  var mChCur = pick(m, 'Channel', 'Trade', 'Customer Type', 'Segment', 'Type', 'Business Unit');
+  var mCompCur = pick(m, 'Company ID', 'Company', 'Company Code', 'Channel', 'Division');
 
   $('mapMaster').innerHTML =
      sel('mDist', 'Distributor ID Column', m, mDcur)
     +sel('mProd', 'Product ID Column', m, mPcur)
-    +sel('mChan', 'Channel Column (GT / MT / Insti)', m, mChCur, 'Auto-categorizes records into the 3 channel dashboards');
+    +sel('mComp', 'Company ID Column (11482 / 162179 / 182386)', m, mCompCur, 'Identifies GT (11482), MT (162179), or Insti (182386)');
 
   var dK = bestKeyCol(mDcur, F.D, pick(d, 'Distributor ERP ID', 'Distributor ID', 'ERP ID'));
   var pK = bestKeyCol(mPcur, F.P, pick(p, 'Product ERP ID', 'Product ID', 'ERP ID', 'SKU'));
@@ -443,13 +432,36 @@ function refreshMappingForm(){
   $('mapCard').classList.remove('hidden');
 }
 
-/* ------------------------------------------------------------- Matching & Categorization */
-function determineChannel(val){
-  if(!val) return 'GT';
-  var s = String(val).trim().toUpperCase();
-  if(s.includes('MODERN') || s==='MT' || s.includes('KEY ACCOUNT') || s.includes('CHAINS')) return 'MT';
-  if(s.includes('INST') || s.includes('HORECA') || s.includes('HOSPITAL') || s.includes('CORP') || s.includes('B2B') || s.includes('GOVT')) return 'INSTI';
-  return 'GT';
+/* ------------------------------------------------------------- Channel Resolution */
+function resolveChannel(row, compCol, fileName){
+  // 1. Direct Column Check
+  if(compCol && row[compCol] != null){
+    var v = String(row[compCol]).trim();
+    if(v.includes('11482')) return 'GT';
+    if(v.includes('162179')) return 'MT';
+    if(v.includes('182386')) return 'INSTI';
+    var u = v.toUpperCase();
+    if(u.includes('MODERN') || u === 'MT') return 'MT';
+    if(u.includes('INST') || u.includes('HORECA') || u.includes('CORP')) return 'INSTI';
+    if(u.includes('GEN') || u === 'GT' || u.includes('RETAIL')) return 'GT';
+  }
+
+  // 2. Fallback: Search all columns in this row for the 3 IDs
+  for(var k in row){
+    var str = String(row[k]||'').trim();
+    if(str === '11482' || str.includes('11482')) return 'GT';
+    if(str === '162179' || str.includes('162179')) return 'MT';
+    if(str === '182386' || str.includes('182386')) return 'INSTI';
+  }
+
+  // 3. Fallback: Check Master File Name (e.g. "...report_11482_...")
+  if(fileName){
+    if(fileName.includes('11482')) return 'GT';
+    if(fileName.includes('162179')) return 'MT';
+    if(fileName.includes('182386')) return 'INSTI';
+  }
+
+  return 'GT'; // Default fallback
 }
 
 function buildIndex(file, erpCol, backCol){
@@ -469,7 +481,7 @@ function buildIndex(file, erpCol, backCol){
 }
 
 function runMatch(){
-  var mD = $('mDist').value, mP = $('mProd').value, mCh = $('mChan').value;
+  var mD = $('mDist').value, mP = $('mProd').value, mComp = $('mComp').value;
   var dK = $('dKey').value, dV = $('dVal').value;
   var pK = $('pKey').value, pV = $('pVal').value;
 
@@ -483,6 +495,11 @@ function runMatch(){
   var pi = buildIndex(F.P, pK, pV);
   var rows = [];
 
+  // Determine all pricing/data columns from Master file
+  var priceCols = F.M.cols.filter(function(c){
+    return c !== mD && c !== mP;
+  });
+
   for(var i=0; i<F.M.objs.length; i++){
     var o = F.M.objs[i];
     var dErpRaw = idText(o[mD]), pErpRaw = idText(o[mP]);
@@ -493,7 +510,7 @@ function runMatch(){
     var pFound = pk !== '' && pi.map.has(pk);
 
     var notes = [];
-    if(!dk || !pk) notes.push('Blank ID');
+    if(!dk || !pk) notes.push('Blank ID in Master');
     var dConf = dk && di.conflicts.has(dk), pConf = pk && pi.conflicts.has(pk);
     if(dConf) notes.push('Conflicting Distributor');
     if(pConf) notes.push('Conflicting Product');
@@ -504,7 +521,7 @@ function runMatch(){
     else if(!dFound) status = 'Distributor Not Found';
     else status = 'Product Not Found';
 
-    var chVal = mCh ? determineChannel(o[mCh]) : 'GT';
+    var chVal = resolveChannel(o, mComp, F.M.name);
 
     rows.push({
       src: o,
@@ -523,13 +540,16 @@ function runMatch(){
   PUBLISHED_DATA = {
     rows: rows,
     masterCols: F.M.cols,
+    priceCols: priceCols,
+    mD: mD,
+    mP: mP,
     dName: dV,
     pName: pV,
     updated: new Date().toISOString()
   };
 
   $('publishBtn').classList.remove('hidden');
-  toast('Matched ' + INT.format(rows.length) + ' records. Click Publish to update Live Dashboards.');
+  toast('Matched ' + INT.format(rows.length) + ' records. Click Publish to make live.');
   renderDashboard();
 }
 
@@ -558,7 +578,7 @@ function renderDashboard(){
   else if(ACTIVE_CHANNEL === 'MT') activeList = mt;
   else if(ACTIVE_CHANNEL === 'INSTI') activeList = insti;
 
-  /* KPI calculations */
+  /* KPI Tiles */
   var total = activeList.length;
   var matched = activeList.filter(function(r){ return r.ok; }).length;
   var issues = total - matched;
@@ -582,7 +602,24 @@ function renderDashboard(){
     kg.appendChild(d);
   });
 
-  /* Table rendering */
+  /* Table Header setup: Includes Pricing Columns */
+  var thRow = el('tr');
+  ['Channel', 'Distributor ERP', PUBLISHED_DATA.dName || 'Mapped Distributor', 'Product ERP', PUBLISHED_DATA.pName || 'Mapped Product'].forEach(function(h){
+    thRow.appendChild(el('th', null, h));
+  });
+
+  // Display pricing columns dynamically
+  var pCols = PUBLISHED_DATA.priceCols || [];
+  pCols.forEach(function(pc){
+    thRow.appendChild(el('th', null, pc));
+  });
+
+  thRow.appendChild(el('th', null, 'Status'));
+  thRow.appendChild(el('th', null, 'Notes'));
+  $('dataHeader').innerHTML = '';
+  $('dataHeader').appendChild(thRow);
+
+  /* Table Body rendering */
   var tb = $('dataBody');
   tb.innerHTML = '';
   var filtered = activeList.filter(function(r){
@@ -596,6 +633,12 @@ function renderDashboard(){
                   (r.pErp && r.pErp.toLowerCase().includes(q)) ||
                   (r.pBack && r.pBack.toLowerCase().includes(q)) ||
                   (r.channel && r.channel.toLowerCase().includes(q));
+      if(!match){
+        // Search inside pricing columns too
+        for(var k=0; k<pCols.length; k++){
+          if(String(r.src[pCols[k]]||'').toLowerCase().includes(q)){ match = true; break; }
+        }
+      }
       if(!match) return false;
     }
     return true;
@@ -619,6 +662,14 @@ function renderDashboard(){
     else tdP.appendChild(el('span', 'pill p-bad', 'Not Found'));
     tr.appendChild(tdP);
 
+    // Populate Pricing Cells
+    pCols.forEach(function(pc){
+      var val = r.src[pc];
+      var isNum = typeof val === 'number' || (!isNaN(val) && val !== '' && val != null);
+      var tdPrice = el('td', isNum ? 'mono n' : null, (val == null || val === '') ? '—' : String(val));
+      tr.appendChild(tdPrice);
+    });
+
     var tdSt = el('td');
     tdSt.appendChild(el('span', 'pill ' + (r.ok ? 'p-ok' : 'p-bad'), r.status));
     tr.appendChild(tdSt);
@@ -631,15 +682,16 @@ function renderDashboard(){
   if(!slice.length){
     var tr0 = el('tr');
     var td0 = el('td', null, 'No records found matching this view/search.');
-    td0.colSpan = 7; td0.style.cssText = 'text-align:center;padding:25px;color:var(--mut)';
+    td0.colSpan = 7 + pCols.length;
+    td0.style.cssText = 'text-align:center;padding:25px;color:var(--mut)';
     tr0.appendChild(td0);
     tb.appendChild(tr0);
   }
 
-  $('tableNotice').textContent = 'Showing ' + INT.format(slice.length) + ' of ' + INT.format(filtered.length) + ' records. The exported file contains all rows.';
+  $('tableNotice').textContent = 'Showing ' + INT.format(slice.length) + ' of ' + INT.format(filtered.length) + ' records. All columns and rows are included in the Excel export.';
 }
 
-/* ------------------------------------------------------------- Export Functions */
+/* ------------------------------------------------------------- Full Pricing Export */
 function exportDataset(kind){
   if(!PUBLISHED_DATA || !PUBLISHED_DATA.rows.length) return;
   var rows = PUBLISHED_DATA.rows;
@@ -647,14 +699,33 @@ function exportDataset(kind){
     rows = rows.filter(function(r){ return r.channel === ACTIVE_CHANNEL; });
   }
 
-  var aoa = [['Channel', 'Distributor ERP', PUBLISHED_DATA.dName || 'Mapped Distributor', 'Product ERP', PUBLISHED_DATA.pName || 'Mapped Product', 'Status', 'Notes']];
+  // Construct full header row
+  var headers = ['Channel'];
+  PUBLISHED_DATA.masterCols.forEach(function(c){
+    headers.push(c);
+    if(c === PUBLISHED_DATA.mD) headers.push(PUBLISHED_DATA.dName || 'Mapped Distributor');
+    if(c === PUBLISHED_DATA.mP) headers.push(PUBLISHED_DATA.pName || 'Mapped Product');
+  });
+  headers.push('Status', 'Mapping Notes');
+
+  var aoa = [headers];
   rows.forEach(function(r){
-    aoa.push([r.channel, r.dErp, r.dBack, r.pErp, r.pBack, r.status, r.notes]);
+    var row = [r.channel];
+    PUBLISHED_DATA.masterCols.forEach(function(c){
+      row.push(r.src[c] == null ? '' : r.src[c]);
+      if(c === PUBLISHED_DATA.mD) row.push(r.dBack);
+      if(c === PUBLISHED_DATA.mP) row.push(r.pBack);
+    });
+    row.push(r.status, r.notes);
+    aoa.push(row);
   });
 
   var filename = (ACTIVE_CHANNEL === 'ALL' ? 'All_Channels' : ACTIVE_CHANNEL) + '_Pricing_' + new Date().toISOString().slice(0,10);
+
   if(kind === 'csv'){
-    var csv = aoa.map(function(r){ return r.map(function(c){ return '"' + String(c||'').replace(/"/g,'""') + '"'; }).join(','); }).join('\r\n');
+    var csv = aoa.map(function(r){
+      return r.map(function(c){ return '"' + String(c||'').replace(/"/g,'""') + '"'; }).join(',');
+    }).join('\r\n');
     var blob = new Blob([csv], {type:'text/csv'});
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename + '.csv'; a.click();
     return;
@@ -694,7 +765,7 @@ $('runBtn').onclick = runMatch;
 $('publishBtn').onclick = function(){
   try {
     localStorage.setItem('PRICING_PUBLISHED_DATA', JSON.stringify(PUBLISHED_DATA));
-    toast('🚀 Published successfully! Visible to all viewers.');
+    toast('🚀 Published successfully! Dashboards are live.');
     setRole('viewer');
     renderDashboard();
   } catch(e){
@@ -729,7 +800,7 @@ document.addEventListener('click', function(e){
   d.addEventListener('drop', function(e){ e.preventDefault(); d.classList.remove('over'); if(e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0], k); });
 });
 
-/* Init: Load any saved published data from local storage */
+/* Init */
 (function init(){
   try {
     var saved = localStorage.getItem('PRICING_PUBLISHED_DATA');
