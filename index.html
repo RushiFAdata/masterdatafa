@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Master Pricing & Channel Portal</title>
+<title>FieldAssist | Master Pricing & Channel Portal</title>
 <style>
 :root{
   --bg:#f4f6f9; --surface:#fff; --surface2:#eef1f6; --line:#dfe4ea; --line2:#c9d1dc;
   --ink:#16233f; --ink2:#55607a; --mut:#8a93a4;
-  --accent:#2F6FB8; --accent-ink:#fff; --teal:#00A88F;
+  --accent:#FF6B35; --accent-hover:#e85822; --accent-ink:#fff; 
+  --navy:#122B49; --teal:#00A88F;
   --good:#1E7A4C; --goodbg:#e9f4ee; --warn:#B4701C; --warnbg:#fcf4e8;
   --bad:#B33A28; --badbg:#fbeceb;
   --gt-color:#1E7A4C; --mt-color:#2F6FB8; --insti-color:#7B39BB;
@@ -19,26 +20,33 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){
   --bg:#0f1829; --surface:#16213a; --surface2:#1d2a47; --line:#273450; --line2:#36445f;
   --ink:#e9edf4; --ink2:#a8b2c6; --mut:#7c8699;
-  --accent:#4C8FD0; --accent-ink:#071020; --teal:#35BFA6;
+  --accent:#FF7F4D; --accent-hover:#ff9266; --accent-ink:#071020; --navy:#244570; --teal:#35BFA6;
   --good:#46A472; --goodbg:#132c1e; --warn:#D9954F; --warnbg:#31230f;
   --bad:#DD6A55; --badbg:#341710; --shadow:none; color-scheme:dark;
 }}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;padding-block:22px 50px}
 h1,h2,h3{margin:0;font-weight:680;letter-spacing:-.018em}
 button{font:inherit;color:inherit}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Header & FieldAssist Branding */
 header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
-.wrap{max-width:1380px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1420px;margin:0 auto;padding:0 20px}
 .nav-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:12px}
-.brand{display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:14px}
+.fa-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.fa-text{display:flex;flex-direction:column}
+.fa-name{font-size:18px;font-weight:800;letter-spacing:-.025em;color:var(--ink);line-height:1.15}
+.fa-name span{color:var(--accent)}
+.fa-sub{font-size:11px;color:var(--mut);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
 .badge{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .b-viewer{background:var(--goodbg);color:var(--good);border:1px solid currentColor}
 .b-admin{background:var(--warnbg);color:var(--warn);border:1px solid currentColor}
 .role-btn{background:transparent;border:1px solid var(--line2);padding:6px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600}
 .role-btn:hover{background:var(--surface2)}
 
-main{padding-block:22px 70px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px}
 .ch{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 17px;border-bottom:1px solid var(--line)}
 .ch h2{font-size:16px}
@@ -65,7 +73,7 @@ main{padding-block:22px 70px}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.pri:hover{filter:brightness(1.07);color:var(--accent-ink)}
+.btn.pri:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
 .btn.success{background:var(--good);border-color:var(--good);color:#fff}
 .btn.success:hover{filter:brightness(1.08)}
 .btn.sm{padding:5px 10px;font-size:12.5px}
@@ -97,10 +105,10 @@ select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 
 .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:16px 0 12px}
 .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.searchbox{max-width:280px;min-width:180px}
+.searchbox{max-width:260px;min-width:160px}
 
 /* Table */
-.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);max-height:650px}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);max-height:72vh}
 table{width:100%;border-collapse:collapse;font-size:12.8px}
 th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:650;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2);position:sticky;top:0;z-index:2}
 td{padding:8px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -114,6 +122,13 @@ td.n{text-align:right}
 .p-mt{color:var(--mt-color);background:color-mix(in srgb,var(--mt-color) 12%,transparent);border:1px solid var(--mt-color)}
 .p-insti{color:var(--insti-color);background:color-mix(in srgb,var(--insti-color) 12%,transparent);border:1px solid var(--insti-color)}
 
+.pagination-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:12.5px;color:var(--mut)}
+
+/* Footer */
+footer{background:var(--surface);border-top:1px solid var(--line);padding:20px 0;margin-top:auto;font-size:12.5px;color:var(--mut)}
+.footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{display:flex;align-items:center;gap:8px}
+
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:60;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:650;box-shadow:0 8px 24px rgba(8,14,28,.3)}
@@ -124,7 +139,18 @@ td.n{text-align:right}
 <header><div class="wrap">
   <div class="nav-row">
     <div class="brand">
-      <h1>Master Pricing & Channel Portal</h1>
+      <div class="fa-logo">
+        <!-- FieldAssist Vector Icon -->
+        <svg width="34" height="34" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="42" height="42" rx="10" fill="#122B49"/>
+          <path d="M12 11H29C29 11 25.5 16.5 21 16.5H16.5V22H25C25 22 22 26.5 18.5 26.5H16.5V31H12V11Z" fill="#FF6B35"/>
+          <circle cx="28.5" cy="28.5" r="3.5" fill="#35BFA6"/>
+        </svg>
+        <div class="fa-text">
+          <span class="fa-name">Field<span>Assist</span></span>
+          <span class="fa-sub">Master Pricing Portal</span>
+        </div>
+      </div>
       <span class="badge b-viewer" id="roleBadge">Viewer Dashboard</span>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
@@ -222,7 +248,17 @@ td.n{text-align:right}
               <button class="btn sm" data-status="ISSUES" id="fIssues">Needs Checking</button>
               <button class="btn sm" data-status="CONFLICT" id="fConflict">Conflicts</button>
             </div>
-            <div style="display:flex;gap:8px;align-items:center">
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:5px">
+                <label for="pageSizeSelect" style="font-size:12px;color:var(--mut);font-weight:600">Show:</label>
+                <select id="pageSizeSelect" style="width:auto;padding:5px 7px;font-size:12.5px">
+                  <option value="ALL" selected>All Records</option>
+                  <option value="1000">1,000</option>
+                  <option value="500">500</option>
+                  <option value="250">250</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
               <input type="search" id="searchBox" class="searchbox" placeholder="Search SKU, Distributor, Price...">
               <button class="btn sm pri" id="exportChannelBtn">↓ Export Excel</button>
               <button class="btn sm" id="exportCsvBtn">↓ CSV</button>
@@ -235,13 +271,35 @@ td.n{text-align:right}
               <tbody id="dataBody"></tbody>
             </table>
           </div>
-          <p id="tableNotice" style="font-size:12px;color:var(--mut);margin-top:10px"></p>
+
+          <div class="pagination-bar" id="paginationBar">
+            <div id="tableNotice"></div>
+            <div id="pageControls" style="display:flex;gap:6px;align-items:center">
+              <button class="btn sm" id="prevPageBtn">← Prev</button>
+              <span id="pageIndicator" style="font-weight:600;padding:0 5px;font-size:12px">Page 1 of 1</span>
+              <button class="btn sm" id="nextPageBtn">Next →</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
 </main>
+
+<!-- Footer with FieldAssist Copyright -->
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="footer-brand">
+        <strong>FieldAssist</strong> &bull; Enterprise Sales & Distribution Platform
+      </div>
+      <div>
+        &copy; <span id="copyYear">2026</span> FieldAssist. All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -258,6 +316,8 @@ var ADMIN_PIN = 'admin123';
 var ACTIVE_CHANNEL = 'ALL';
 var STATUS_FILTER = 'ALL';
 var SEARCH_TERM = '';
+var PAGE_SIZE = 'ALL';
+var CURRENT_PAGE = 1;
 var F = {M:null, D:null, P:null};
 var PUBLISHED_DATA = null;
 
@@ -434,7 +494,6 @@ function refreshMappingForm(){
 
 /* ------------------------------------------------------------- Channel Resolution */
 function resolveChannel(row, compCol, fileName){
-  // 1. Direct Column Check
   if(compCol && row[compCol] != null){
     var v = String(row[compCol]).trim();
     if(v.includes('11482')) return 'GT';
@@ -446,7 +505,6 @@ function resolveChannel(row, compCol, fileName){
     if(u.includes('GEN') || u === 'GT' || u.includes('RETAIL')) return 'GT';
   }
 
-  // 2. Fallback: Search all columns in this row for the 3 IDs
   for(var k in row){
     var str = String(row[k]||'').trim();
     if(str === '11482' || str.includes('11482')) return 'GT';
@@ -454,14 +512,13 @@ function resolveChannel(row, compCol, fileName){
     if(str === '182386' || str.includes('182386')) return 'INSTI';
   }
 
-  // 3. Fallback: Check Master File Name (e.g. "...report_11482_...")
   if(fileName){
     if(fileName.includes('11482')) return 'GT';
     if(fileName.includes('162179')) return 'MT';
     if(fileName.includes('182386')) return 'INSTI';
   }
 
-  return 'GT'; // Default fallback
+  return 'GT';
 }
 
 function buildIndex(file, erpCol, backCol){
@@ -495,7 +552,6 @@ function runMatch(){
   var pi = buildIndex(F.P, pK, pV);
   var rows = [];
 
-  // Determine all pricing/data columns from Master file
   var priceCols = F.M.cols.filter(function(c){
     return c !== mD && c !== mP;
   });
@@ -550,6 +606,7 @@ function runMatch(){
 
   $('publishBtn').classList.remove('hidden');
   toast('Matched ' + INT.format(rows.length) + ' records. Click Publish to make live.');
+  CURRENT_PAGE = 1;
   renderDashboard();
 }
 
@@ -578,7 +635,6 @@ function renderDashboard(){
   else if(ACTIVE_CHANNEL === 'MT') activeList = mt;
   else if(ACTIVE_CHANNEL === 'INSTI') activeList = insti;
 
-  /* KPI Tiles */
   var total = activeList.length;
   var matched = activeList.filter(function(r){ return r.ok; }).length;
   var issues = total - matched;
@@ -602,13 +658,11 @@ function renderDashboard(){
     kg.appendChild(d);
   });
 
-  /* Table Header setup: Includes Pricing Columns */
   var thRow = el('tr');
   ['Channel', 'Distributor ERP', PUBLISHED_DATA.dName || 'Mapped Distributor', 'Product ERP', PUBLISHED_DATA.pName || 'Mapped Product'].forEach(function(h){
     thRow.appendChild(el('th', null, h));
   });
 
-  // Display pricing columns dynamically
   var pCols = PUBLISHED_DATA.priceCols || [];
   pCols.forEach(function(pc){
     thRow.appendChild(el('th', null, pc));
@@ -619,9 +673,6 @@ function renderDashboard(){
   $('dataHeader').innerHTML = '';
   $('dataHeader').appendChild(thRow);
 
-  /* Table Body rendering */
-  var tb = $('dataBody');
-  tb.innerHTML = '';
   var filtered = activeList.filter(function(r){
     if(STATUS_FILTER === 'MATCHED' && !r.ok) return false;
     if(STATUS_FILTER === 'ISSUES' && r.ok) return false;
@@ -634,7 +685,6 @@ function renderDashboard(){
                   (r.pBack && r.pBack.toLowerCase().includes(q)) ||
                   (r.channel && r.channel.toLowerCase().includes(q));
       if(!match){
-        // Search inside pricing columns too
         for(var k=0; k<pCols.length; k++){
           if(String(r.src[pCols[k]]||'').toLowerCase().includes(q)){ match = true; break; }
         }
@@ -644,7 +694,21 @@ function renderDashboard(){
     return true;
   });
 
-  var slice = filtered.slice(0, 150);
+  var pageSizeNum = PAGE_SIZE === 'ALL' ? filtered.length : parseInt(PAGE_SIZE, 10);
+  if(!pageSizeNum || pageSizeNum <= 0) pageSizeNum = filtered.length || 1;
+
+  var totalPages = Math.ceil(filtered.length / pageSizeNum) || 1;
+  if(CURRENT_PAGE > totalPages) CURRENT_PAGE = totalPages;
+  if(CURRENT_PAGE < 1) CURRENT_PAGE = 1;
+
+  var startIdx = PAGE_SIZE === 'ALL' ? 0 : (CURRENT_PAGE - 1) * pageSizeNum;
+  var endIdx = PAGE_SIZE === 'ALL' ? filtered.length : Math.min(startIdx + pageSizeNum, filtered.length);
+  var slice = filtered.slice(startIdx, endIdx);
+
+  var tb = $('dataBody');
+  tb.innerHTML = '';
+  var frag = document.createDocumentFragment();
+
   slice.forEach(function(r){
     var tr = el('tr');
     var chBadge = el('span', 'pill p-' + r.channel.toLowerCase(), r.channel);
@@ -662,7 +726,6 @@ function renderDashboard(){
     else tdP.appendChild(el('span', 'pill p-bad', 'Not Found'));
     tr.appendChild(tdP);
 
-    // Populate Pricing Cells
     pCols.forEach(function(pc){
       var val = r.src[pc];
       var isNum = typeof val === 'number' || (!isNaN(val) && val !== '' && val != null);
@@ -676,7 +739,7 @@ function renderDashboard(){
 
     var tdNt = el('td', null, r.notes || '—');
     tr.appendChild(tdNt);
-    tb.appendChild(tr);
+    frag.appendChild(tr);
   });
 
   if(!slice.length){
@@ -685,10 +748,20 @@ function renderDashboard(){
     td0.colSpan = 7 + pCols.length;
     td0.style.cssText = 'text-align:center;padding:25px;color:var(--mut)';
     tr0.appendChild(td0);
-    tb.appendChild(tr0);
+    frag.appendChild(tr0);
   }
+  tb.appendChild(frag);
 
-  $('tableNotice').textContent = 'Showing ' + INT.format(slice.length) + ' of ' + INT.format(filtered.length) + ' records. All columns and rows are included in the Excel export.';
+  if(PAGE_SIZE === 'ALL'){
+    $('tableNotice').textContent = 'Displaying all ' + INT.format(filtered.length) + ' records.';
+    $('pageControls').classList.add('hidden');
+  } else {
+    $('tableNotice').textContent = 'Showing ' + INT.format(startIdx + (slice.length ? 1 : 0)) + ' to ' + INT.format(endIdx) + ' of ' + INT.format(filtered.length) + ' records';
+    $('pageControls').classList.remove('hidden');
+    $('pageIndicator').textContent = 'Page ' + CURRENT_PAGE + ' of ' + totalPages;
+    $('prevPageBtn').disabled = CURRENT_PAGE <= 1;
+    $('nextPageBtn').disabled = CURRENT_PAGE >= totalPages;
+  }
 }
 
 /* ------------------------------------------------------------- Full Pricing Export */
@@ -699,7 +772,6 @@ function exportDataset(kind){
     rows = rows.filter(function(r){ return r.channel === ACTIVE_CHANNEL; });
   }
 
-  // Construct full header row
   var headers = ['Channel'];
   PUBLISHED_DATA.masterCols.forEach(function(c){
     headers.push(c);
@@ -720,7 +792,7 @@ function exportDataset(kind){
     aoa.push(row);
   });
 
-  var filename = (ACTIVE_CHANNEL === 'ALL' ? 'All_Channels' : ACTIVE_CHANNEL) + '_Pricing_' + new Date().toISOString().slice(0,10);
+  var filename = 'FieldAssist_' + (ACTIVE_CHANNEL === 'ALL' ? 'All_Channels' : ACTIVE_CHANNEL) + '_Pricing_' + new Date().toISOString().slice(0,10);
 
   if(kind === 'csv'){
     var csv = aoa.map(function(r){
@@ -734,6 +806,16 @@ function exportDataset(kind){
   var wb = XLSX.utils.book_new();
   var ws = XLSX.utils.aoa_to_sheet(aoa);
   XLSX.utils.book_append_sheet(wb, ws, ACTIVE_CHANNEL + ' Pricing');
+
+  var meta = [
+    ['FieldAssist Pricing Management System'],
+    ['Generated On', new Date().toISOString().replace('T',' ').slice(0,19)],
+    ['Channel Scope', ACTIVE_CHANNEL],
+    ['Total Exported Rows', rows.length],
+    [],
+    ['Copyright', '© FieldAssist. All rights reserved.']
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(meta), 'Metadata');
   XLSX.writeFile(wb, filename + '.xlsx');
 }
 
@@ -743,6 +825,7 @@ document.querySelectorAll('.channel-nav .tab').forEach(function(tab){
     document.querySelectorAll('.channel-nav .tab').forEach(function(t){ t.classList.remove('active'); });
     tab.classList.add('active');
     ACTIVE_CHANNEL = tab.getAttribute('data-channel');
+    CURRENT_PAGE = 1;
     renderDashboard();
   };
 });
@@ -752,12 +835,34 @@ document.querySelectorAll('.filters button').forEach(function(btn){
     document.querySelectorAll('.filters button').forEach(function(b){ b.classList.remove('pri'); });
     btn.classList.add('pri');
     STATUS_FILTER = btn.getAttribute('data-status');
+    CURRENT_PAGE = 1;
     renderDashboard();
   };
 });
 
+$('pageSizeSelect').onchange = function(e){
+  PAGE_SIZE = e.target.value;
+  CURRENT_PAGE = 1;
+  renderDashboard();
+};
+
+$('prevPageBtn').onclick = function(){
+  if(CURRENT_PAGE > 1){
+    CURRENT_PAGE--;
+    renderDashboard();
+    $('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+};
+
+$('nextPageBtn').onclick = function(){
+  CURRENT_PAGE++;
+  renderDashboard();
+  $('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
 $('searchBox').oninput = function(e){
   SEARCH_TERM = e.target.value.trim();
+  CURRENT_PAGE = 1;
   renderDashboard();
 };
 
@@ -802,6 +907,7 @@ document.addEventListener('click', function(e){
 
 /* Init */
 (function init(){
+  $('copyYear').textContent = new Date().getFullYear();
   try {
     var saved = localStorage.getItem('PRICING_PUBLISHED_DATA');
     if(saved){
